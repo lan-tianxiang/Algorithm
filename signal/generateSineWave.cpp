@@ -74,7 +74,7 @@ void generateSineWave(double *signal, int onceprocessSamples, int *processedSamp
         while (currentPhase < -2 * PI) {
             currentPhase += 2 * PI;
         }
-        signal[i] = (double)(amplitude * sin(currentPhase));
+        signal[i] = (double)(amplitude * sinf(currentPhase));
         *processedSamples %= cycleSamples;
     }
 }
