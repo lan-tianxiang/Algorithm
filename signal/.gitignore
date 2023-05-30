@@ -1,6 +1,7 @@
 *.wav
 *.a
 *.o
-output/
-output*
+out/
+out*
+build/
 
