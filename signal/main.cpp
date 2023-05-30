@@ -140,8 +140,12 @@ int main() {
         return 1;
     }
 
+    reverbEffect(inputSignal, inputSignal, testSampleNum, sampleRate);
+
     writeWavFile("output.wav", inputSignal, testSampleNum, sampleRate);
+    /*
     writeTxtFile("output.txt", inputSignal, testSampleNum);
+    */
 
     free(inputSignal);
     return 0;

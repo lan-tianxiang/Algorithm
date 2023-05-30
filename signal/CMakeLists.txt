@@ -4,7 +4,7 @@ project(SIGNAL_PRO1 VERSION 0.1.0)
 # Set C++ standard to C++17
 set(CMAKE_CXX_STANDARD 17)
 
-set(SRC_LIST main.cpp reverb.cpp stereo_surround.cpp generateSineWave.cpp)
+set(SRC_LIST main.cpp reverb.cpp stereo_surround.cpp generateSineWave.cpp compressor.cpp)
 
 # Add source files to executable target
 add_executable(SIGNAL_PRO1 ${SRC_LIST})

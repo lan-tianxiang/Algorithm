@@ -1,30 +1,42 @@
 #include "reverb.h"
+#include "compressor.h"
 #include <stdlib.h> // Add this line to include stdlib.h
 #include <string.h>
 
 void reverbEffect(double *leftSignal, double *rightSignal, int onceprocessSamples, float sampleRate) {
-    double delayTime = 0.05f; // 50ms 的延迟时间
-    int delaySamples = (int)(delayTime * sampleRate);
-    double feedback = 0.5f; // 延迟反馈系数
-    double *delayLine = (double *)malloc(delaySamples * sizeof(double));
-    memset(delayLine, 0, delaySamples * sizeof(double));
-    double *reflectionLine = (double *)malloc(delaySamples * sizeof(double));
-    memset(reflectionLine, 0, delaySamples * sizeof(double));
+    // Define the parameters of the reverb effect
+    double delayTime = 0.8;
+    const int delaySamples = sampleRate * delayTime;
+    const double feedback = 0.5;
+    const double wetLevel = 0.2;
+    const double dryLevel = 1.0 - wetLevel;
 
-    double delayGain = 0.5f; // 延迟增益
-    double reflectionGain = 0.3f; // 反射增益
-
-    for (int i = 0; i < onceprocessSamples; i++) {
-        double delayedSample = delayLine[i % delaySamples];
-        double reflectedSample = reflectionLine[i % delaySamples];
-
-        leftSignal[i] = leftSignal[i] + delayGain * delayedSample + reflectionGain * reflectedSample;
-        rightSignal[i] = rightSignal[i] + delayGain * delayedSample + reflectionGain * reflectedSample;
-
-        //delayLine[i % delaySamples] = leftSignal[i] + feedback * delayedSample;
-        //reflectionLine[i % delaySamples] = (leftSignal[i] + rightSignal[i]) / 2.0 + feedback * reflectedSample;
+    // Allocate memory for the reflection line
+    double* reflectionLine = (double*)malloc(sizeof(double) * delaySamples);
+    for (int i = 0; i < delaySamples; i++) {
+        reflectionLine[i] = 0.0;
     }
 
-    free(delayLine);
+    // Process each sample in the input signal
+    for (int i = 0; i < onceprocessSamples; i++) {
+        // Compute the reflected sample
+        double reflectedSample = reflectionLine[i % delaySamples];
+
+        // Compute the output sample
+        double outputSample = leftSignal[i] * dryLevel + (reflectedSample + leftSignal[i]) * wetLevel;
+
+        // Update the reflection line
+        reflectionLine[i % delaySamples] = leftSignal[i] + feedback * reflectedSample;
+
+        // Write the output sample to the left and right channels
+        leftSignal[i] = outputSample;
+        rightSignal[i] = outputSample;
+    }
+
+    // Apply compression to the output signal
+    //compressor(leftSignal, onceprocessSamples, 1.0, 1.5);
+    //compressor(rightSignal, onceprocessSamples, 1.0, 1.5);
+
+    // Free the memory allocated for the reflection line
     free(reflectionLine);
 }
