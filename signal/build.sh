@@ -1,1 +1,1 @@
-gcc generateSineWave.c -o ./output/generateSineWave -lm -lsndfile
+gcc generateSineWave.c -o generateSineWave -lm -lsndfile 
