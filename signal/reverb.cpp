@@ -1,14 +1,13 @@
 #include "reverb.h"
-#include "compressor.h"
 #include <stdlib.h> // Add this line to include stdlib.h
 #include <string.h>
 
 void reverbEffect(double *leftSignal, double *rightSignal, int onceprocessSamples, float sampleRate) {
     // Define the parameters of the reverb effect
-    double delayTime = 0.8;
+    double delayTime = 0.1;
     const int delaySamples = sampleRate * delayTime;
-    const double feedback = 0.5;
-    const double wetLevel = 0.2;
+    const double feedback = 0.3;
+    const double wetLevel = 0.1;
     const double dryLevel = 1.0 - wetLevel;
 
     // Allocate memory for the reflection line
@@ -32,10 +31,6 @@ void reverbEffect(double *leftSignal, double *rightSignal, int onceprocessSample
         leftSignal[i] = outputSample;
         rightSignal[i] = outputSample;
     }
-
-    // Apply compression to the output signal
-    //compressor(leftSignal, onceprocessSamples, 1.0, 1.5);
-    //compressor(rightSignal, onceprocessSamples, 1.0, 1.5);
 
     // Free the memory allocated for the reflection line
     free(reflectionLine);

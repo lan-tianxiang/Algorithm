@@ -6,6 +6,7 @@
 #include "generateSineWave.h"
 #include "reverb.h"
 #include "stereo_surround.h"
+#include "compressor.h"
 
 #include <sndfile.h>
 
@@ -38,11 +39,11 @@ double* readWavFile(const char* filename, int* sampleNum, int* sampleRate, int* 
     return signal;
 }
 
-void writeWavFile(const char* wavFilename, double* signal, int sampleNum, int sampleRate) {
+void writeWavFile(const char* wavFilename, double* signal, int sampleNum, int sampleRate, int channels) {
     // Define the format of the output file
     SF_INFO sfinfo;
     sfinfo.samplerate = sampleRate;
-    sfinfo.channels = 1;
+    sfinfo.channels = channels;
     sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_PCM_32;
 
     // Open the output WAV file
@@ -54,8 +55,8 @@ void writeWavFile(const char* wavFilename, double* signal, int sampleNum, int sa
 
     // Write the samples to the output WAV file
     sf_count_t count = sf_write_double(wavfile, signal, sampleNum);
-    if (count != sampleNum) {
-        printf("Error writing samples to output WAV file\n");
+    if (count != (sf_count_t)sampleNum) {
+        printf("Error writing samples to output WAV file %ld != %d\n", count, sampleNum);
         return;
     }
 
@@ -95,58 +96,88 @@ void audioPlayer(void *signal, int onceprocessSamples, float sampleRate) {
     // 生成信号
     double* inputSignal = (double*)signal;
     generateSineWave(inputSignal, onceprocessSamples, &processedSamples, risingTime, stayTime, cycleTime, sampleRate, minimumFreq, maximumFreq);
-
-
-    // 为了方便处理，将信号转换为双声道
-    //double *leftSignal = (double *)malloc(sizeof(double) * onceprocessSamples);
-    double *rightSignal = (double *)malloc(sizeof(double) * onceprocessSamples);
-    //memset(leftSignal, 0, sizeof(double) * onceprocessSamples);
-    memset(rightSignal, 0, sizeof(double) * onceprocessSamples);
-    for (int i = 0; i < onceprocessSamples; i++) {
-        //leftSignal[i] = inputSignal[i * 2];
-        rightSignal[i] = inputSignal[i];
-    }
-
-
-    //surroundEffect(inputSignal, onceprocessSamples, sampleRate);
-    reverbEffect(inputSignal, rightSignal, onceprocessSamples, sampleRate);
-
-    free(rightSignal);
-
-    // 拷贝信号
-    //memcpy(inputSignal, leftSignal, sizeof(float) * onceprocessSamples);
 }
 
 int main() {
-    /*
+    
     float sampleRate = 48000;
-    int signalTime = 15;
+    int signalTime = 5;
     int testSampleNum = sampleRate * signalTime;
 
     int onceprocessTime = 1;
     int onceprocessSamples = (int)(sampleRate * onceprocessTime); 
     int totalprocesscycle = testSampleNum / onceprocessSamples;
-    double inputSignal[testSampleNum];
+    double inputSignal[testSampleNum*2];
+    double outputSignal[testSampleNum*2];
     for (int i = 0; i < (totalprocesscycle); i++) {
         audioPlayer(inputSignal + (i * onceprocessSamples), onceprocessSamples, sampleRate);
     }
-    */
+    memcpy(inputSignal + testSampleNum, inputSignal, testSampleNum * sizeof(double));
+
+    // Apply 6dB gain to the output signal
+    for (int i = 0; i < testSampleNum; i++) {
+        inputSignal[i] *= 0.5;
+        inputSignal[i+testSampleNum] *= 0.5;
+    }
+
+    memset(inputSignal, 0, testSampleNum * sizeof(double));
+    memset(inputSignal + testSampleNum, 0, testSampleNum * sizeof(double));
+    inputSignal[5000] = 1;
+    memcpy(inputSignal + testSampleNum, inputSignal, testSampleNum * sizeof(double));
+    // Apply reverb to the output signal
+    reverbEffect(inputSignal + testSampleNum, inputSignal + testSampleNum, testSampleNum, sampleRate);
+    
+    // Apply compression to the output signal
+    //compressor(inputSignal + testSampleNum, onceprocessSamples, 0.9, 2.0);
+    
+    //让inputSignal组成立体声格式
+    for (int i = 0; i < testSampleNum; i++) {
+        outputSignal[i * 2] = inputSignal[i];
+        outputSignal[i * 2 + 1] = inputSignal[i+testSampleNum];
+    }
+
+    writeTxtFile("output.txt", inputSignal + testSampleNum, testSampleNum);
+    writeWavFile("output.wav", outputSignal, testSampleNum, sampleRate, 2);
+    
+    
+    /*
     int testSampleNum;
     int sampleRate;
     int channels;
     double* inputSignal = readWavFile("input.wav", &testSampleNum, &sampleRate, &channels);
+    double* inputSignal_2 = (double*)malloc(sizeof(double) * testSampleNum);
+    double* outputSignal = (double*)malloc(sizeof(double) * testSampleNum * 4);
+    
     if (!inputSignal) {
         printf("Error reading input WAV file\n");
         return 1;
     }
+    
+    // Apply 6dB gain to the output signal
+    for (int i = 0; i < testSampleNum; i++) {
+        inputSignal[i] *= 0.5;
+    }
 
+    memcpy(inputSignal_2, inputSignal, testSampleNum * sizeof(double));
+
+    //surroundEffect(inputSignal, onceprocessSamples, sampleRate);
     reverbEffect(inputSignal, inputSignal, testSampleNum, sampleRate);
 
-    writeWavFile("output.wav", inputSignal, testSampleNum, sampleRate);
-    /*
-    writeTxtFile("output.txt", inputSignal, testSampleNum);
-    */
+    // Apply compression to the output signal
+    //compressor(inputSignal, testSampleNum, 0.9, 2.0);
+    
+    //让inputSignal组成立体声格式
+    for (int i = 0; i < testSampleNum; i++) {
+        outputSignal[i * 2] = inputSignal_2[i];
+        outputSignal[i * 2 + 1] = inputSignal[i];
+    }
+
+    channels = 2;
+    writeWavFile("output.wav", outputSignal, testSampleNum, sampleRate, channels);
 
     free(inputSignal);
+    free(inputSignal_2);
+    free(outputSignal);
+    */
     return 0;
 }
