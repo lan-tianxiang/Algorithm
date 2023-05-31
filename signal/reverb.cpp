@@ -11,43 +11,76 @@ void reverbEffect_reflectionLines(double *leftSignal, double *rightSignal, int o
     double dryLevel = 1.0 - wetLevel;
 
     // Define the number of reflection lines
-    int numLines = 1;
+    int numLines = 4;
 
-    // Allocate memory for the reflection line
-    double** reflectionLines = (double**)malloc(sizeof(double*) * numLines);
+    // Allocate memory for the reflection lines of the left channel
+    double** leftReflectionLines = (double**)malloc(sizeof(double*) * numLines);
     for (int i = 0; i < numLines; i++) {
-        reflectionLines[i] = (double*)malloc(sizeof(double) * delaySamples);
+        leftReflectionLines[i] = (double*)malloc(sizeof(double) * delaySamples);
         for (int j = 0; j < delaySamples; j++) {
-            reflectionLines[i][j] = 0.0;
+            leftReflectionLines[i][j] = 0.0;
+        }
+    }
+
+    // Allocate memory for the reflection lines of the right channel
+    double** rightReflectionLines = (double**)malloc(sizeof(double*) * numLines);
+    for (int i = 0; i < numLines; i++) {
+        rightReflectionLines[i] = (double*)malloc(sizeof(double) * delaySamples);
+        for (int j = 0; j < delaySamples; j++) {
+            rightReflectionLines[i][j] = 0.0;
         }
     }
 
     // Process each sample in the input signal
     for (int i = 0; i < onceprocessSamples; i++) {
-        // Compute the output of each reflection line
-        double outputSamples[numLines];
+        // Compute the output of each reflection line for the left channel
+        double leftOutputSamples[numLines];
         for (int j = 0; j < numLines; j++) {
-            double reflectedSample = reflectionLines[j][i % delaySamples];
-            outputSamples[j] = reflectedSample;
+            double reflectedSample = leftReflectionLines[j][i % delaySamples];
+            leftOutputSamples[j] = reflectedSample;
         }
 
-        // Compute the weighted sum of the reflection line outputs
-        double outputSample = 0.0;
+        // Compute the weighted sum of the reflection line outputs for the left channel
+        double leftOutputSample = 0.0;
         for (int j = 0; j < numLines; j++) {
-            outputSample += outputSamples[j] * wetLevel / numLines;
+            leftOutputSample += leftOutputSamples[j] * wetLevel / numLines;
         }
-        outputSample += leftSignal[i] * dryLevel;
+        leftOutputSample += leftSignal[i] * dryLevel;
 
-        // Update the reflection lines
+        // Update the reflection lines for the left channel
         for (int j = 0; j < numLines; j++) {
-            reflectionLines[j][i % delaySamples] = leftSignal[i] + feedback * outputSamples[j];
+            leftReflectionLines[j][i % delaySamples] = leftSignal[i] + feedback * leftOutputSamples[j];
         }
 
-        // Write the output sample to the left and right channels
-        leftSignal[i] = outputSample;
-        rightSignal[i] = outputSample;
+        // Compute the output of each reflection line for the right channel
+        double rightOutputSamples[numLines];
+        for (int j = 0; j < numLines; j++) {
+            double reflectedSample = rightReflectionLines[j][i % delaySamples];
+            rightOutputSamples[j] = reflectedSample;
+        }
+
+        // Compute the weighted sum of the reflection line outputs for the right channel
+        double rightOutputSample = 0.0;
+        for (int j = 0; j < numLines; j++) {
+            rightOutputSample += rightOutputSamples[j] * wetLevel / numLines;
+        }
+        rightOutputSample += rightSignal[i] * dryLevel;
+
+        // Update the reflection lines for the right channel
+        for (int j = 0; j < numLines; j++) {
+            rightReflectionLines[j][i % delaySamples] = rightSignal[i] + feedback * rightOutputSamples[j];
+        }
+
+        // Mix the left and right channel outputs
+        leftSignal[i] = leftOutputSample;
+        rightSignal[i] = rightOutputSample;
     }
 
     // Free the memory allocated for the reflection line
-    free(reflectionLines);
+    for (int i = 0; i < numLines; i++) {
+        free(leftReflectionLines[i]);
+        free(rightReflectionLines[i]);
+    }
+    free(leftReflectionLines);
+    free(rightReflectionLines);
 }
