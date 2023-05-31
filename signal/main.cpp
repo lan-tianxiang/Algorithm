@@ -99,7 +99,7 @@ void audioPlayer(void *signal, int onceprocessSamples, float sampleRate) {
 }
 
 int main() {
-    
+    /*
     float sampleRate = 48000;
     int signalTime = 5;
     int testSampleNum = sampleRate * signalTime;
@@ -112,7 +112,7 @@ int main() {
     for (int i = 0; i < (totalprocesscycle); i++) {
         audioPlayer(inputSignal + (i * onceprocessSamples), onceprocessSamples, sampleRate);
     }
-    memcpy(inputSignal + testSampleNum, inputSignal, testSampleNum * sizeof(double));
+    //memcpy(inputSignal + testSampleNum, inputSignal, testSampleNum * sizeof(double));
 
     // Apply 6dB gain to the output signal
     for (int i = 0; i < testSampleNum; i++) {
@@ -120,10 +120,10 @@ int main() {
         inputSignal[i+testSampleNum] *= 0.5;
     }
 
-    memset(inputSignal, 0, testSampleNum * sizeof(double));
-    memset(inputSignal + testSampleNum, 0, testSampleNum * sizeof(double));
+    //memset(inputSignal, 0, testSampleNum * sizeof(double));
+    //memset(inputSignal + testSampleNum, 0, testSampleNum * sizeof(double));
     
-    inputSignal[5000] = 1;
+    //inputSignal[5000] = 1;
     //memcpy(inputSignal + testSampleNum, inputSignal, testSampleNum * sizeof(double));
     
     // Apply reverb to the output signal
@@ -133,7 +133,7 @@ int main() {
     //compressor(inputSignal + testSampleNum, onceprocessSamples, 0.9, 2.0);
     
     // Apply stereo surround to the output signal
-    //surroundEffect(inputSignal, inputSignal + testSampleNum, testSampleNum, sampleRate);
+    surroundEffect(inputSignal, inputSignal + testSampleNum, testSampleNum, sampleRate);
 
     //让inputSignal组成立体声格式
     for (int i = 0; i < testSampleNum; i++) {
@@ -143,9 +143,8 @@ int main() {
 
     writeTxtFile("output.txt", inputSignal + testSampleNum, testSampleNum);
     writeWavFile("output.wav", outputSignal, testSampleNum, sampleRate, 2);
-    
-    
-    /*
+    */
+    //*
     int testSampleNum;
     int sampleRate;
     int channels;
@@ -163,10 +162,11 @@ int main() {
         inputSignal[i] *= 0.5;
     }
 
-    memcpy(inputSignal_2, inputSignal, testSampleNum * sizeof(double));
+    //memcpy(inputSignal_2, inputSignal, testSampleNum * sizeof(double));
+    memset(inputSignal_2, 0, testSampleNum * sizeof(double));
 
-    //surroundEffect(inputSignal, onceprocessSamples, sampleRate);
-    reverbEffect_reflectionLines(inputSignal, inputSignal, testSampleNum, sampleRate);
+    reverbEffect_reflectionLines(inputSignal, inputSignal_2, testSampleNum, sampleRate);
+    surroundEffect(inputSignal, inputSignal_2, testSampleNum, sampleRate);
 
     // Apply compression to the output signal
     //compressor(inputSignal, testSampleNum, 0.9, 2.0);
@@ -177,12 +177,12 @@ int main() {
         outputSignal[i * 2 + 1] = inputSignal[i];
     }
 
-    channels = 2;
-    writeWavFile("output.wav", outputSignal, testSampleNum, sampleRate, channels);
+    //channels = 2;
+    writeWavFile("output.wav", inputSignal, testSampleNum, sampleRate, channels);
 
     free(inputSignal);
     free(inputSignal_2);
     free(outputSignal);
-    */
+    //*/
     return 0;
 }
