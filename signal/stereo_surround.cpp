@@ -2,20 +2,26 @@
 #include <stdlib.h>
 #include <string.h>
 
-void surroundEffect(void *signal, int onceprocessSamples, float sampleRate) {
-    float *input = (float *)signal;
-    float *left = input;
-    float *right = input + onceprocessSamples;
+void surroundEffect(double *leftSignal, double *rightSignal, int onceprocessSamples, float sampleRate) {
     float delayTime = 0.03f; // 30ms 的延迟时间
     int delaySamples = (int)(delayTime * sampleRate);
     float feedback = 0.5f; // 延迟反馈系数
-    float *delayLine = (float *)malloc(delaySamples * sizeof(float));
-    memset(delayLine, 0, delaySamples * sizeof(float));
+    float *delayLine_L = (float *)malloc(delaySamples * sizeof(float));
+    float *delayLine_R = (float *)malloc(delaySamples * sizeof(float));
+
+    memset(delayLine_L, 0, delaySamples * sizeof(float));
+    memset(delayLine_R, 0, delaySamples * sizeof(float));
+
     for (int i = 0; i < onceprocessSamples; i++) {
-        float delayedSample = delayLine[i % delaySamples];
-        left[i] += delayedSample;
-        right[i] -= delayedSample;
-        delayLine[i % delaySamples] = input[i] + feedback * delayedSample;
+        float delayedSample_L = delayLine_L[i % delaySamples];
+        float delayedSample_R = delayLine_R[i % delaySamples];
+
+        leftSignal[i] += delayedSample_L;
+        rightSignal[i] += delayedSample_R;
+
+        delayLine_L[i % delaySamples] = leftSignal[i] + feedback * delayedSample_R;
+        delayLine_R[i % delaySamples] = rightSignal[i] + feedback * delayedSample_L;
     }
-    free(delayLine);
+    free(delayLine_L);
+    free(delayLine_R);
 }

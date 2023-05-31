@@ -122,14 +122,19 @@ int main() {
 
     memset(inputSignal, 0, testSampleNum * sizeof(double));
     memset(inputSignal + testSampleNum, 0, testSampleNum * sizeof(double));
+    
     inputSignal[5000] = 1;
-    memcpy(inputSignal + testSampleNum, inputSignal, testSampleNum * sizeof(double));
+    //memcpy(inputSignal + testSampleNum, inputSignal, testSampleNum * sizeof(double));
+    
     // Apply reverb to the output signal
-    reverbEffect(inputSignal + testSampleNum, inputSignal + testSampleNum, testSampleNum, sampleRate);
+    //reverbEffect_reflectionLines(inputSignal + testSampleNum, inputSignal + testSampleNum, testSampleNum, sampleRate);
     
     // Apply compression to the output signal
     //compressor(inputSignal + testSampleNum, onceprocessSamples, 0.9, 2.0);
     
+    // Apply stereo surround to the output signal
+    surroundEffect(inputSignal, inputSignal + testSampleNum, testSampleNum, sampleRate);
+
     //让inputSignal组成立体声格式
     for (int i = 0; i < testSampleNum; i++) {
         outputSignal[i * 2] = inputSignal[i];
@@ -161,7 +166,7 @@ int main() {
     memcpy(inputSignal_2, inputSignal, testSampleNum * sizeof(double));
 
     //surroundEffect(inputSignal, onceprocessSamples, sampleRate);
-    reverbEffect(inputSignal, inputSignal, testSampleNum, sampleRate);
+    reverbEffect_reflectionLines(inputSignal, inputSignal, testSampleNum, sampleRate);
 
     // Apply compression to the output signal
     //compressor(inputSignal, testSampleNum, 0.9, 2.0);
