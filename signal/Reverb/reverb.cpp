@@ -11,7 +11,7 @@ void reverbEffect_reflectionLines(double *leftSignal, double *rightSignal, int o
     double dryLevel = 1.0 - wetLevel;
 
     // Define the number of reflection lines
-    int numLines = 4;
+    int numLines = 1;
 
     // Allocate memory for the reflection lines of the left channel
     double** leftReflectionLines = (double**)malloc(sizeof(double*) * numLines);
