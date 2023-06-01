@@ -3,10 +3,10 @@
 #include <math.h>
 #include <sndfile.h>
 
-#include "generateSineWave.h"
 #include "reverb.h"
-#include "stereo_surround.h"
+#include "StereoSurround.h"
 #include "compressor.h"
+#include "SineWaveGenerator.h"
 
 #include <sndfile.h>
 
@@ -99,27 +99,31 @@ void audioPlayer(void *signal, int onceprocessSamples, float sampleRate) {
 }
 
 int main() {
-    /*
-    float sampleRate = 48000;
-    int signalTime = 5;
-    int testSampleNum = sampleRate * signalTime;
+    ///*
+    const float sampleRate = 48000;
+    const int signalTime = 10;
+    const int testSampleNum = sampleRate * signalTime;
 
-    int onceprocessTime = 1;
-    int onceprocessSamples = (int)(sampleRate * onceprocessTime); 
-    int totalprocesscycle = testSampleNum / onceprocessSamples;
-    double inputSignal[testSampleNum*2];
-    double outputSignal[testSampleNum*2];
-    for (int i = 0; i < (totalprocesscycle); i++) {
-        audioPlayer(inputSignal + (i * onceprocessSamples), onceprocessSamples, sampleRate);
-    }
-    //memcpy(inputSignal + testSampleNum, inputSignal, testSampleNum * sizeof(double));
+    static double inputSignal_L[testSampleNum];
+    static double inputSignal_R[testSampleNum];
+    static double inputSignal[testSampleNum * 2];
+
+    static double outputSignal_L[testSampleNum];
+    static double outputSignal_R[testSampleNum];
+    static double outputSignal[testSampleNum * 2];
+
+    audioPlayer(inputSignal_L, testSampleNum, sampleRate);
 
     // Apply 6dB gain to the output signal
     for (int i = 0; i < testSampleNum; i++) {
-        inputSignal[i] *= 0.5;
-        inputSignal[i+testSampleNum] *= 0.5;
+        inputSignal_L[i] *= 0.5;
+        inputSignal_R[i] *= 0.5;
     }
 
+    for (int i = 0; i < testSampleNum; i++) {
+        outputSignal_L[i] = inputSignal_L[i];
+        outputSignal_R[i] = inputSignal_R[i];
+    }
     //memset(inputSignal, 0, testSampleNum * sizeof(double));
     //memset(inputSignal + testSampleNum, 0, testSampleNum * sizeof(double));
     
@@ -127,24 +131,30 @@ int main() {
     //memcpy(inputSignal + testSampleNum, inputSignal, testSampleNum * sizeof(double));
     
     // Apply reverb to the output signal
-    reverbEffect_reflectionLines(inputSignal, inputSignal + testSampleNum, testSampleNum, sampleRate);
+    reverbEffect_reflectionLines(outputSignal_L, outputSignal_R, testSampleNum, sampleRate);
     
     // Apply compression to the output signal
     //compressor(inputSignal + testSampleNum, onceprocessSamples, 0.9, 2.0);
     
     // Apply stereo surround to the output signal
-    surroundEffect(inputSignal, inputSignal + testSampleNum, testSampleNum, sampleRate);
+    //surroundEffect(inputSignal_L, inputSignal_R, testSampleNum, sampleRate);
 
-    //让inputSignal组成立体声格式
     for (int i = 0; i < testSampleNum; i++) {
-        outputSignal[i * 2] = inputSignal[i];
-        outputSignal[i * 2 + 1] = inputSignal[i+testSampleNum];
+        inputSignal[i * 2] = inputSignal_L[i];
+        inputSignal[i * 2 + 1] = inputSignal_R[i];
     }
 
-    writeTxtFile("output.txt", inputSignal + testSampleNum, testSampleNum);
-    writeWavFile("output.wav", outputSignal, testSampleNum, sampleRate, 2);
-    */
-    //*
+    for (int i = 0; i < testSampleNum; i++) {
+        outputSignal[i * 2] = outputSignal_L[i];
+        outputSignal[i * 2 + 1] = outputSignal_R[i];
+    }
+
+
+    //writeTxtFile("output.txt", inputSignal + testSampleNum, testSampleNum);
+    writeWavFile("inputSignal.wav", inputSignal, testSampleNum, sampleRate, 2);
+    writeWavFile("outputSignal.wav", outputSignal, testSampleNum, sampleRate, 2);
+    //*/
+    /*
     int testSampleNum;
     int sampleRate;
     int channels;
@@ -183,6 +193,6 @@ int main() {
     free(inputSignal);
     free(inputSignal_2);
     free(outputSignal);
-    //*/
+    */
     return 0;
 }

@@ -1,4 +1,4 @@
-#include "stereo_surround.h"
+#include "StereoSurround.h"
 #include <stdlib.h>
 #include <string.h>
 

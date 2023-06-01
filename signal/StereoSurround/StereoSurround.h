@@ -1,5 +1,5 @@
-#ifndef STEREO_SURROUND_H
-#define STEREO_SURROUND_H
+#ifndef STEREOSURROUND_H
+#define STEREOSURROUND_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,4 +15,4 @@ void surroundEffect(double *leftSignal, double *rightSignal, int onceprocessSamp
 }
 #endif//__cplusplus
 
-#endif//STEREO_SURROUND_H
+#endif//STEREOSURROUND_H

@@ -1,7 +1,4 @@
 *.wav
 *.a
 *.o
-out/
-out*
 build/
-

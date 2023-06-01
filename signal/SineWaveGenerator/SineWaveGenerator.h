@@ -1,5 +1,5 @@
-#ifndef GENERATESINEWAVE_H
-#define GENERATESINEWAVE_H
+#ifndef SINWAVEGENERATOR_H
+#define SINWAVEGENERATOR_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,4 +20,4 @@ void generateSineWave(double *signal, int onceprocessSamples, int *processedSamp
 }
 #endif//__cplusplus
 
-#endif//REVERB_H
+#endif//SINWAVEGENERATOR_H
