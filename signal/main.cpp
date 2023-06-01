@@ -44,7 +44,7 @@ void writeWavFile(const char* wavFilename, double* signal, int sampleNum, int sa
     SF_INFO sfinfo;
     sfinfo.samplerate = sampleRate;
     sfinfo.channels = channels;
-    sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_PCM_32;
+    sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_DOUBLE;
 
     // Open the output WAV file
     SNDFILE* wavfile = sf_open(wavFilename, SFM_WRITE, &sfinfo);
@@ -98,8 +98,7 @@ void audioPlayer(void *signal, int onceprocessSamples, float sampleRate) {
     generateSineWave(inputSignal, onceprocessSamples, &processedSamples, risingTime, stayTime, cycleTime, sampleRate, minimumFreq, maximumFreq);
 }
 
-int main() {
-    ///*
+int signal_tester(void) {
     const float sampleRate = 48000;
     const int signalTime = 10;
     const int testSampleNum = sampleRate * signalTime;
@@ -114,7 +113,8 @@ int main() {
 
     audioPlayer(inputSignal_L, testSampleNum, sampleRate);
 
-    // Apply 6dB gain to the output signal
+    // Apply 6dB gain to the output signal to compensate for the attenuation of the reverb effect
+    // avoid Clipping distortion caused by the reverb effect in the same time
     for (int i = 0; i < testSampleNum; i++) {
         inputSignal_L[i] *= 0.5;
         inputSignal_R[i] *= 0.5;
@@ -124,20 +124,20 @@ int main() {
         outputSignal_L[i] = inputSignal_L[i];
         outputSignal_R[i] = inputSignal_R[i];
     }
-    //memset(inputSignal, 0, testSampleNum * sizeof(double));
-    //memset(inputSignal + testSampleNum, 0, testSampleNum * sizeof(double));
     
-    //inputSignal[5000] = 1;
-    //memcpy(inputSignal + testSampleNum, inputSignal, testSampleNum * sizeof(double));
-    
+    //memset(outputSignal_L, 0, testSampleNum * sizeof(double));
+    //memset(outputSignal_R, 0, testSampleNum * sizeof(double));    
+    //outputSignal_L[5000] = 1;
+
     // Apply reverb to the output signal
     reverbEffect_reflectionLines(outputSignal_L, outputSignal_R, testSampleNum, sampleRate);
     
     // Apply compression to the output signal
-    //compressor(inputSignal + testSampleNum, onceprocessSamples, 0.9, 2.0);
+    compressor(outputSignal_L, testSampleNum, 0.9, 2.0);
+    compressor(outputSignal_R, testSampleNum, 0.9, 2.0);
     
     // Apply stereo surround to the output signal
-    //surroundEffect(inputSignal_L, inputSignal_R, testSampleNum, sampleRate);
+    surroundEffect(outputSignal_L, outputSignal_R, testSampleNum, sampleRate);
 
     for (int i = 0; i < testSampleNum; i++) {
         inputSignal[i * 2] = inputSignal_L[i];
@@ -149,50 +149,79 @@ int main() {
         outputSignal[i * 2 + 1] = outputSignal_R[i];
     }
 
-
     //writeTxtFile("output.txt", inputSignal + testSampleNum, testSampleNum);
     writeWavFile("inputSignal.wav", inputSignal, testSampleNum, sampleRate, 2);
     writeWavFile("outputSignal.wav", outputSignal, testSampleNum, sampleRate, 2);
-    //*/
-    /*
+
+    return 0;
+}
+
+int signal_tester_2(const char* inputfilename,const char* outputfilename) {
     int testSampleNum;
     int sampleRate;
     int channels;
-    double* inputSignal = readWavFile("input.wav", &testSampleNum, &sampleRate, &channels);
-    double* inputSignal_2 = (double*)malloc(sizeof(double) * testSampleNum);
-    double* outputSignal = (double*)malloc(sizeof(double) * testSampleNum * 4);
+    double* inputSignal = readWavFile(inputfilename, &testSampleNum, &sampleRate, &channels);
+    static double inputSignal_L[48000*240];
+    static double inputSignal_R[48000*240];
+    static double outputSignal[48000*240 * 2];
     
     if (!inputSignal) {
         printf("Error reading input WAV file\n");
         return 1;
     }
     
-    // Apply 6dB gain to the output signal
-    for (int i = 0; i < testSampleNum; i++) {
-        inputSignal[i] *= 0.5;
+    // Apply 6dB gain to the output signal to compensate for the attenuation of the reverb effect
+    // avoid Clipping distortion caused by the reverb effect in the same time
+    if(channels == 1){
+        for (int i = 0; i < testSampleNum; i++) {
+            inputSignal[i] *= 0.5;
+        }
+        for (int i = 0; i < testSampleNum; i++) {
+            inputSignal_L[i] = inputSignal[i];
+            inputSignal_R[i] = inputSignal[i];
+        }
+    }
+    else if(channels == 2){
+        for (int i = 0; i < testSampleNum; i++) {
+            inputSignal[i] *= 0.5;
+            inputSignal[i + 1] *= 0.5;
+        }
+        for (int i = 0; i < testSampleNum; i++) {
+            inputSignal_L[i] = inputSignal[i];
+            inputSignal_R[i] = inputSignal[i + 1];
+        }
     }
 
-    //memcpy(inputSignal_2, inputSignal, testSampleNum * sizeof(double));
-    memset(inputSignal_2, 0, testSampleNum * sizeof(double));
-
-    reverbEffect_reflectionLines(inputSignal, inputSignal_2, testSampleNum, sampleRate);
-    surroundEffect(inputSignal, inputSignal_2, testSampleNum, sampleRate);
-
+    //memset(inputSignal_L, 0, testSampleNum * sizeof(double));
+    //memset(inputSignal_R, 0, testSampleNum * sizeof(double));
+    //inputSignal_L[5000] = 1.0f;
+    //memset(outputSignal, 0, 48000*240 * 2 * sizeof(double));
+    
+    // Apply reverb to the output signal
+    reverbEffect_reflectionLines(inputSignal_L, inputSignal_R, testSampleNum, sampleRate);
+    
     // Apply compression to the output signal
-    //compressor(inputSignal, testSampleNum, 0.9, 2.0);
+    compressor(inputSignal_L, testSampleNum, 0.9, 2.0);
+    compressor(inputSignal_R, testSampleNum, 0.9, 2.0);
+    
+    // Apply stereo surround to the output signal
+    surroundEffect(inputSignal_L, inputSignal_R, testSampleNum, sampleRate);
     
     //让inputSignal组成立体声格式
     for (int i = 0; i < testSampleNum; i++) {
-        outputSignal[i * 2] = inputSignal_2[i];
-        outputSignal[i * 2 + 1] = inputSignal[i];
+        outputSignal[i * 2] = inputSignal_L[i];
+        outputSignal[i * 2 + 1] = inputSignal_R[i];
     }
-
-    //channels = 2;
-    writeWavFile("output.wav", inputSignal, testSampleNum, sampleRate, channels);
+    
+    channels = 2;
+    writeWavFile(outputfilename, outputSignal, testSampleNum*2, sampleRate, channels);
 
     free(inputSignal);
-    free(inputSignal_2);
-    free(outputSignal);
-    */
+    return 0;
+}
+
+int main() {
+    signal_tester();
+    signal_tester_2("input_L.wav", "output.wav");
     return 0;
 }

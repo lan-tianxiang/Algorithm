@@ -4,7 +4,7 @@
 
 void reverbEffect_reflectionLines(double *leftSignal, double *rightSignal, int onceprocessSamples, float sampleRate) {
     // Define the parameters of the reverb effect
-    double delayTime = 0.005;
+    double delayTime = 0.08;
     int delaySamples = sampleRate * delayTime;
     double feedback = 0.3;
     double wetLevel = 0.1;

@@ -3,9 +3,9 @@
 #include <string.h>
 
 void surroundEffect(double *leftSignal, double *rightSignal, int onceprocessSamples, float sampleRate) {
-    float delayTime = 0.008f; // 30ms 的延迟时间
+    float delayTime = 0.10f; // 20ms 的延迟时间
     int delaySamples = (int)(delayTime * sampleRate);
-    float feedback = 0.5f; // 延迟反馈系数
+    float feedback = 0.3f; // 延迟反馈系数
     float *delayLine_L = (float *)malloc(delaySamples * sizeof(float));
     float *delayLine_R = (float *)malloc(delaySamples * sizeof(float));
 
@@ -16,11 +16,11 @@ void surroundEffect(double *leftSignal, double *rightSignal, int onceprocessSamp
         float delayedSample_L = delayLine_L[i % delaySamples];
         float delayedSample_R = delayLine_R[i % delaySamples];
 
-        leftSignal[i] += delayedSample_L;
-        rightSignal[i] += delayedSample_R;
-
         delayLine_L[i % delaySamples] = rightSignal[i] * feedback;
         delayLine_R[i % delaySamples] = leftSignal[i] * feedback;
+        
+        leftSignal[i] += delayedSample_L;
+        rightSignal[i] += delayedSample_R;
     }
 
     // Free the memory allocated for the delay lines
