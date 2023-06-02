@@ -6,8 +6,8 @@ void reverbEffect_reflectionLines(double *leftSignal, double *rightSignal, int o
     // Define the parameters of the reverb effect
     double delayTime = 0.08;
     int delaySamples = sampleRate * delayTime;
-    double feedback = 0.3;
-    double wetLevel = 0.1;
+    double feedback = 0.2;
+    double wetLevel = 0.3;
     double dryLevel = 1.0 - wetLevel;
 
     // Define the number of reflection lines
@@ -36,8 +36,19 @@ void reverbEffect_reflectionLines(double *leftSignal, double *rightSignal, int o
         // Compute the output of each reflection line for the left channel
         double leftOutputSamples[numLines];
         for (int j = 0; j < numLines; j++) {
-            double reflectedSample = leftReflectionLines[j][i % delaySamples];
-            leftOutputSamples[j] = reflectedSample;
+            leftOutputSamples[j] = leftReflectionLines[j][i % delaySamples];
+        }
+
+        // Update the reflection lines for the left channel
+        for (int j = 0; j < numLines; j++) {
+            // Compute the new delay line for the current reflection line
+            double newDelayLine = leftSignal[i] + (feedback * leftOutputSamples[j]);
+
+            // Store the new delay line in the reflection line buffer
+            leftReflectionLines[j][i % delaySamples] = newDelayLine;
+
+            // Update the output sample for the current reflection line
+            leftOutputSamples[j] = leftReflectionLines[j][(i - delaySamples + 1 + delaySamples) % delaySamples];
         }
 
         // Compute the weighted sum of the reflection line outputs for the left channel
@@ -47,29 +58,30 @@ void reverbEffect_reflectionLines(double *leftSignal, double *rightSignal, int o
         }
         leftOutputSample += leftSignal[i] * dryLevel;
 
-        // Update the reflection lines for the left channel
-        for (int j = 0; j < numLines; j++) {
-            leftReflectionLines[j][i % delaySamples] = leftSignal[i] + feedback * leftOutputSamples[j];
-        }
-
         // Compute the output of each reflection line for the right channel
         double rightOutputSamples[numLines];
         for (int j = 0; j < numLines; j++) {
-            double reflectedSample = rightReflectionLines[j][i % delaySamples];
-            rightOutputSamples[j] = reflectedSample;
+            rightOutputSamples[j] = rightReflectionLines[j][i % delaySamples];
         }
 
-        // Compute the weighted sum of the reflection line outputs for the right channel
+        // Update the reflection lines for the right channel
+        for (int j = 0; j < numLines; j++) {
+            // Compute the new delay line for the current reflection line
+            double newDelayLine = rightSignal[i] + (feedback * rightOutputSamples[j]);
+
+            // Store the new delay line in the reflection line buffer
+            rightReflectionLines[j][i % delaySamples] = newDelayLine;
+
+            // Update the output sample for the current reflection line
+            rightOutputSamples[j] = rightReflectionLines[j][(i - delaySamples + 1 + delaySamples) % delaySamples];
+        }
+
+        // Compute the weighted sum of the reflection line outputs for the left channel
         double rightOutputSample = 0.0;
         for (int j = 0; j < numLines; j++) {
             rightOutputSample += rightOutputSamples[j] * wetLevel / numLines;
         }
         rightOutputSample += rightSignal[i] * dryLevel;
-
-        // Update the reflection lines for the right channel
-        for (int j = 0; j < numLines; j++) {
-            rightReflectionLines[j][i % delaySamples] = rightSignal[i] + feedback * rightOutputSamples[j];
-        }
 
         // Mix the left and right channel outputs
         leftSignal[i] = leftOutputSample;
@@ -84,3 +96,4 @@ void reverbEffect_reflectionLines(double *leftSignal, double *rightSignal, int o
     free(leftReflectionLines);
     free(rightReflectionLines);
 }
+
