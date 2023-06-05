@@ -177,10 +177,10 @@ int signal_tester_2(const char* inputfilename_L, const char* inputfilename_R, co
         inputSignal_R[i] *= 0.5;
     }
 
-    //memset(inputSignal_L, 0, testSampleNum * sizeof(double));
-    //memset(inputSignal_R, 0, testSampleNum * sizeof(double));
-    //inputSignal_L[5000] = 1.0f;
-    //memset(outputSignal, 0, 48000*240 * 2 * sizeof(double));
+    memset(inputSignal_L, 0, testSampleNum * sizeof(double));
+    memset(inputSignal_R, 0, testSampleNum * sizeof(double));
+    inputSignal_L[5000] = 1.0f;
+    memset(outputSignal, 0, 48000*240 * 2 * sizeof(double));
     
     // Apply reverb to the output signal
     reverbEffect_reflectionLines(inputSignal_L, inputSignal_R, testSampleNum, sampleRate);
