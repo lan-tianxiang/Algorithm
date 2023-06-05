@@ -11,7 +11,7 @@ extern "C" {
  * @param onceprocessSamples 单次处理样本数
  * @param sampleRate 采样率
 *******************************************************************************************/
-void reverbEffect_reflectionLines(double *leftSignal, double *rightSignal, int onceprocessSamples, float sampleRate);
+void physicalModelingReverbAlgorithm(double* leftSignal, double* rightSignal, int onceprocessSamples, float sampleRate);
 }
 #endif//__cplusplus
 

@@ -130,7 +130,7 @@ int signal_tester(void) {
     //outputSignal_L[5000] = 1;
 
     // Apply reverb to the output signal
-    reverbEffect_reflectionLines(outputSignal_L, outputSignal_R, testSampleNum, sampleRate);
+    physicalModelingReverbAlgorithm(outputSignal_L, outputSignal_R, testSampleNum, sampleRate);
     
     // Apply compression to the output signal
     compressor(outputSignal_L, testSampleNum, 0.9, 2.0);
@@ -179,11 +179,11 @@ int signal_tester_2(const char* inputfilename_L, const char* inputfilename_R, co
 
     memset(inputSignal_L, 0, testSampleNum * sizeof(double));
     memset(inputSignal_R, 0, testSampleNum * sizeof(double));
-    inputSignal_L[5000] = 1.0f;
+    inputSignal_L[5000] = 0.9f;
     memset(outputSignal, 0, 48000*240 * 2 * sizeof(double));
     
     // Apply reverb to the output signal
-    reverbEffect_reflectionLines(inputSignal_L, inputSignal_R, testSampleNum, sampleRate);
+    physicalModelingReverbAlgorithm(inputSignal_L, inputSignal_R, testSampleNum, sampleRate);
     
     // Apply stereo surround to the output signal
     //surroundEffect(inputSignal_L, inputSignal_R, testSampleNum, sampleRate);
