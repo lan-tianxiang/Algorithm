@@ -45,62 +45,60 @@
 总的来说，混响算法的选择取决于具体的应用和期望的声音。有些应用可能需要高度逼真的混响效果，而其他应用可能优先考虑灵活性和易于实现。
 */
 
-// 计算声音从源点到反射线的距离
-float calculateDistanceToLine(float sourceX, float sourceY, float sourceZ, float sourceDirectionX, float sourceDirectionY, float sourceDirectionZ, float lineX, float lineY, float lineZ) {
-    float dx = lineX - sourceX;
-    float dy = lineY - sourceY;
-    float dz = lineZ - sourceZ;
-    float dot = dx * sourceDirectionX + dy * sourceDirectionY + dz * sourceDirectionZ;
-    float distance = sqrtf(dx * dx + dy * dy + dz * dz - dot * dot);
-    return distance;
+float calculateDistanceToLine(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) {
+    // 计算点到直线的距离
+    float a = y2 * z3 - y3 * z2 - y1 * z3 + y3 * z1 + y1 * z2 - y2 * z1;
+    float b = x3 * z2 - x2 * z3 + x1 * z3 - x3 * z1 - x1 * z2 + x2 * z1;
+    float c = x2 * y3 - x3 * y2 - x1 * y3 + x3 * y1 + x1 * y2 - x2 * y1;
+    float d = -(a * x1 + b * y1 + c * z1);
+    return fabsf(a * x2 + b * y2 + c * z2 + d) / sqrtf(a * a + b * b + c * c);
 }
 
-// 计算声音从反射线到墙壁的距离
-float calculateDistanceToWall(float lineX, float lineY, float lineZ, float roomWidth, float roomHeight, float roomDepth) {
-    float distanceToWall = 0.0f;
-    if (lineX == 0.0f || lineX == roomWidth) {
-        distanceToWall = lineZ < roomDepth / 2.0f ? lineZ : roomDepth - lineZ;
-    } else if (lineZ == 0.0f || lineZ == roomDepth) {
-        distanceToWall = lineX < roomWidth / 2.0f ? lineX : roomWidth - lineX;
-    } else {
-        distanceToWall = lineY < roomHeight / 2.0f ? lineY : roomHeight - lineY;
-    }
-    return distanceToWall;
+float calculateDistanceToWall(float x, float y, float z, float roomWidth, float roomHeight, float roomDepth) {
+    // 计算点到墙壁的距离
+    float distanceToLeftWall = x;
+    float distanceToRightWall = roomWidth - x;
+    float distanceToFrontWall = z;
+    float distanceToBackWall = roomDepth - z;
+    float distanceToCeiling = roomHeight - y;
+    float distanceToFloor = y;
+    return fminf(fminf(distanceToLeftWall, distanceToRightWall), fminf(fminf(distanceToFrontWall, distanceToBackWall), fminf(distanceToCeiling, distanceToFloor)));
 }
 
-// 计算声音在反射线和墙壁之间来回反射的次数
 int calculateNumReflections(float distanceToLine, float distanceToWall, float reflectionCoefficient) {
-    float totalDistance = distanceToLine + distanceToWall;
-    float totalReflections = logf(0.001f) / logf(reflectionCoefficient);
-    float numReflections = totalReflections * totalDistance / distanceToLine;
-    return (int)numReflections;
+    // 计算声音在反射线和墙壁之间来回反射的次数
+    float totalDistance = distanceToLine + distanceToWall * 2.0f;
+    float totalReflections = logf(1.0f / reflectionCoefficient) / logf(1.0f - 1.0f / (totalDistance / 343.0f));
+    return (int)totalReflections;
 }
 
-// physicalModelingReverbAlgorithm 函数的实现
-std::vector<float> physicalModelingReverbAlgorithm(const std::vector<float>& inputSignal, float roomWidth, float roomHeight, float roomDepth, float reflectionCoefficient, int numReflectionLines) {
+double* physicalModelingReverbAlgorithm(const double* inputSignal, int inputSignalSize, float roomWidth, float roomHeight, float roomDepth, float reflectionCoefficient, int numReflectionLines) {
     // 生成延迟线的位置
-    std::vector<float> reflectionLinePositions;
+    float* reflectionLinePositions = (float*)malloc(numReflectionLines * 2 * sizeof(float));
     for (int i = 0; i < numReflectionLines; i++) {
         // 在房间的左侧和右侧各生成一条延迟线
         if (i % 2 == 0) {
-            reflectionLinePositions.push_back((i + 2) * roomWidth / (numReflectionLines + 1));
+            reflectionLinePositions[i * 2] = (i + 2) * roomWidth / (numReflectionLines + 1);
         } else {
-            reflectionLinePositions.push_back((i + 1) * roomWidth / (numReflectionLines + 1));
+            reflectionLinePositions[i * 2] = (i + 1) * roomWidth / (numReflectionLines + 1);
         }
         // 在房间的前侧和后侧各生成一条延迟线
         if (i % 2 == 0) {
-            reflectionLinePositions.push_back((i + 2) * roomDepth / (numReflectionLines + 1));
+            reflectionLinePositions[i * 2 + 1] = (i + 2) * roomDepth / (numReflectionLines + 1);
         } else {
-            reflectionLinePositions.push_back((i + 1) * roomDepth / (numReflectionLines + 1));
+            reflectionLinePositions[i * 2 + 1] = (i + 1) * roomDepth / (numReflectionLines + 1);
         }
     }
 
     // 计算每条延迟线的反射次数和衰减量
-    std::vector<float> outputSignal(inputSignal.size());
-    for (int i = 0; i < reflectionLinePositions.size(); i += 2) {
+    double* outputSignal = (double*)malloc(inputSignalSize * sizeof(double));
+    for (int i = 0; i < inputSignalSize; i++) {
+        outputSignal[i] = 0.0f;
+    }
+    for (int i = 0; i < numReflectionLines * 2; i += 2) {
         float totalDelay = 0.0f;
         float totalAmplitude = 1.0f;
-        for (int j = 0; j < inputSignal.size(); j++) {
+        for (int j = 0; j < inputSignalSize; j++) {
             // 计算声音从源点到反射线的距离
             float distanceToLine = calculateDistanceToLine(0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, reflectionLinePositions[i], 0.0f, reflectionLinePositions[i + 1]);
             // 计算声音从反射线到墙壁的距离
@@ -115,12 +113,13 @@ std::vector<float> physicalModelingReverbAlgorithm(const std::vector<float>& inp
             totalAmplitude *= amplitude;
             // 将延迟后的信号加入输出信号中
             if (j >= delay) {
-                outputSignal[j] += inputSignal[j - delay] * amplitude;
+                outputSignal[j] += inputSignal[j - (int)delay] * amplitude;
             }
         }
         // 输出每条延迟线的延迟量和衰减量
-        std::cout << "Reflection line " << i / 2 << " delay: " << totalDelay << ", amplitude: " << totalAmplitude << std::endl;
+        printf("Reflection line %d delay: %f, amplitude: %f\n", i / 2, totalDelay, totalAmplitude);
     }
 
+    free(reflectionLinePositions);
     return outputSignal;
 }

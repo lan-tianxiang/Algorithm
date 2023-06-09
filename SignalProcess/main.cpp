@@ -8,8 +8,6 @@
 #include "compressor.h"
 #include "SineWaveGenerator.h"
 
-#include <sndfile.h>
-
 double* readWavFile(const char* filename, int* sampleNum, int* sampleRate, int* channels){
     // Open the input WAV file
     SF_INFO sfinfo;
@@ -98,6 +96,7 @@ void audioPlayer(void *signal, int onceprocessSamples, float sampleRate) {
     generateSineWave(inputSignal, onceprocessSamples, &processedSamples, risingTime, stayTime, cycleTime, sampleRate, minimumFreq, maximumFreq);
 }
 
+/*
 int signal_tester(void) {
     const float sampleRate = 48000;
     const int signalTime = 10;
@@ -130,7 +129,7 @@ int signal_tester(void) {
     //outputSignal_L[5000] = 1;
 
     // Apply reverb to the output signal
-    physicalModelingReverbAlgorithm(outputSignal_L, outputSignal_R, testSampleNum, sampleRate);
+    physicalModelingReverbAlgorithm(outputSignal_L, testSampleNum, 5, 0.5, 0.5, 0.5);
     
     // Apply compression to the output signal
     compressor(outputSignal_L, testSampleNum, 0.9, 2.0);
@@ -155,6 +154,7 @@ int signal_tester(void) {
 
     return 0;
 }
+*/
 
 int signal_tester_2(const char* inputfilename_L, const char* inputfilename_R, const char* outputfilename) {
     int testSampleNum;
@@ -183,7 +183,8 @@ int signal_tester_2(const char* inputfilename_L, const char* inputfilename_R, co
     memset(outputSignal, 0, 48000*240 * 2 * sizeof(double));
     
     // Apply reverb to the output signal
-    physicalModelingReverbAlgorithm(inputSignal_L, inputSignal_R, testSampleNum, sampleRate);
+    double* inputSignal_123 = NULL;
+    inputSignal_123 = physicalModelingReverbAlgorithm(inputSignal_L, testSampleNum, 5, 0.5, 0.5, 0.5, 0.5);
     
     // Apply stereo surround to the output signal
     //surroundEffect(inputSignal_L, inputSignal_R, testSampleNum, sampleRate);
@@ -194,7 +195,7 @@ int signal_tester_2(const char* inputfilename_L, const char* inputfilename_R, co
     
     //让inputSignal组成立体声格式
     for (int i = 0; i < testSampleNum; i++) {
-        outputSignal[i * 2] = inputSignal_L[i] * 2;
+        outputSignal[i * 2] = inputSignal_123[i] * 2;
         outputSignal[i * 2 + 1] = inputSignal_R[i] * 2;
     }
     
