@@ -1,3 +1,6 @@
 {
-    "cmake.sourceDirectory": "/home/highdimen/Downloads/Code/Algorithm/SignalProcess"
+    "cmake.sourceDirectory": "/home/highdimen/Downloads/Code/Algorithm/SignalProcess",
+    "files.associations": {
+        "ostream": "cpp"
+    }
 }

@@ -1,4 +1,6 @@
 #include "Freeverb.hpp"
+#include "revmodel.hpp"
+#include <cmath>
 
 void Freeverb::suspend()
 {
@@ -8,45 +10,6 @@ void Freeverb::suspend()
 void Freeverb::resume()
 {
 	model.mute();
-}
-
-bool Freeverb::getEffectName (char* name)
-{
-    strcpy (name, "Freeverb3"); // Change this to what you want!!
-    return true;
-}
-
-bool Freeverb::getVendorString (char* text)
-{
-    strcpy (text, "Dreampoint"); // Change this to what you want!!
-    return true;
-}
-
-bool Freeverb::getProductString (char* text)
-{
-    strcpy (text, "Freeverb3"); // Change this to what you want!!
-    return true;
-}
-
-long Freeverb::canDo (char* text)
-{
-    if (!strcmp (text, "1in1out"))
-        return 1;
-    if (!strcmp (text, "2in2out"))
-        return 1;
-	if (!strcmp (text, "1in2out"))
-		return 1;
-    return -1;
-}
-
-void Freeverb::setProgramName(char *name)
-{
-	strcpy(programName, name);
-}
-
-void Freeverb::getProgramName(char *name)
-{
-	strcpy(name, programName);
 }
 
 void Freeverb::setParameter(long index, float value)
@@ -102,80 +65,6 @@ float Freeverb::getParameter(long index)
 	return ret;
 }
 
-void Freeverb::getParameterName(long index, char *label)
-{
-	switch (index)
-	{
-	case KMode:
-		strcpy(label, "Mode");
-		break;
-	case KRoomSize:
-		strcpy(label, "Room size");
-		break;
-	case KDamp:
-		strcpy(label, "Damping");
-		break;
-	case KWet:
-		strcpy(label, "Wet level");
-		break;
-	case KDry:
-		strcpy(label, "Dry level");
-		break;
-	case KWidth:
-		strcpy(label, "Width");
-		break;
-	}
-}
-
-void Freeverb::getParameterDisplay(long index, char *text)
-{
-	switch (index)
-	{
-	case KMode:
-		if (model.getmode() >= freezemode)
-			strcpy(text,"Freeze");
-		else
-			strcpy(text,"Normal");
-		break;
-	case KRoomSize:
-		float2string(model.getroomsize()*scaleroom+offsetroom, text);
-		break;
-	case KDamp:
-		long2string((long)(model.getdamp()*100), text);
-		break;
-	case KWet:
-		dB2string(model.getwet()*scalewet,text);
-		break;
-	case KDry:
-		dB2string(model.getdry()*scaledry,text);
-		break;
-	case KWidth:
-		long2string((long)(model.getwidth()*100), text);
-		break;
-	}
-}
-
-void Freeverb::getParameterLabel(long index, char *label)
-{
-	switch (index)
-	{
-	case KMode:
-		strcpy(label,"mode");
-		break;
-	case KRoomSize:
-		strcpy(label,"size");
-		break;
-	case KDamp:
-	case KWidth:
-		strcpy(label, "%");
-		break;
-	case KWet:
-	case KDry:
-		strcpy(label, "dB");
-		break;
-	}
-}
-
 void Freeverb::process(float **inputs, float **outputs, long sampleFrames)
 {
 	model.processmix(inputs[0],inputs[1],outputs[0],outputs[1],sampleFrames,1);
@@ -186,4 +75,47 @@ void Freeverb::processReplacing(float **inputs, float **outputs, long sampleFram
 	model.processreplace(inputs[0],inputs[1],outputs[0],outputs[1],sampleFrames,1);
 }
 
-//ends
+int main()
+{
+	Freeverb freeverb;
+	float **inputs;
+	float **outputs;
+	long sampleFrames = 1024;
+	long numInputs = 2;
+	long numOutputs = 2;
+	long i;
+
+	inputs = new float*[numInputs];
+	for (i = 0; i < numInputs; i++)
+		inputs[i] = new float[sampleFrames];
+
+	outputs = new float*[numOutputs];
+	for (i = 0; i < numOutputs; i++)
+		outputs[i] = new float[sampleFrames];
+
+	//input the sine wave
+	for (i = 0; i < sampleFrames; i++)
+	{
+		inputs[0][i] = sin(2.0f * 3.14159265358979323846f * 440.0f * i / 44100.0f);
+		inputs[1][i] = inputs[0][i];
+	}
+
+	freeverb.setParameter(KMode, 0.5f);
+	freeverb.setParameter(KRoomSize, 0.5f);
+	freeverb.setParameter(KDamp, 0.5f);
+	freeverb.setParameter(KWet, 0.5f);
+	freeverb.setParameter(KDry, 0.5f);
+	freeverb.setParameter(KWidth, 0.5f);
+
+	freeverb.process(inputs, outputs, sampleFrames);
+
+	for (i = 0; i < numInputs; i++)
+		delete [] inputs[i];
+	delete [] inputs;
+
+	for (i = 0; i < numOutputs; i++)
+		delete [] outputs[i];
+	delete [] outputs;
+
+	return 0;
+}

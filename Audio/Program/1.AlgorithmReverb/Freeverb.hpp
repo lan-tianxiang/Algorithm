@@ -5,11 +5,26 @@
 
 enum
 {
-	KMode, KRoomSize, KDamp, KWidth, KWet, KDry,
+	KMode,
+	KRoomSize,
+	KDamp,
+	KWidth,
+	KWet,
+	KDry,
 	KNumParams
 };
 
-#endif//_Freeverb_H
+class Freeverb
+{
+public:
+			void	suspend();
+			void	resume();
+			void	setParameter(long index, float value);
+			float	getParameter(long index);
+			void	process(float **inputs, float **outputs, long numsamples);
+			void	processReplacing(float **inputs, float **outputs, long numsamples);
 
-//ends
-
+private:
+	revmodel	model;
+};
+#endif
