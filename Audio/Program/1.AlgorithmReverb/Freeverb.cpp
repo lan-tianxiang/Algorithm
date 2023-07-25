@@ -1,5 +1,6 @@
 #include "Freeverb.hpp"
 #include "revmodel.hpp"
+#include <sndfile.h>
 #include <cmath>
 
 void Freeverb::suspend()
@@ -80,7 +81,7 @@ int main()
 	Freeverb freeverb;
 	float **inputs;
 	float **outputs;
-	long sampleFrames = 1024;
+	long sampleFrames = 1024000;
 	long numInputs = 2;
 	long numOutputs = 2;
 	long i;
@@ -100,14 +101,30 @@ int main()
 		inputs[1][i] = inputs[0][i];
 	}
 
-	freeverb.setParameter(KMode, 0.5f);
-	freeverb.setParameter(KRoomSize, 0.5f);
+	freeverb.setParameter(KMode, 0.2f);
+	freeverb.setParameter(KRoomSize, 5.5f);
 	freeverb.setParameter(KDamp, 0.5f);
 	freeverb.setParameter(KWet, 0.5f);
 	freeverb.setParameter(KDry, 0.5f);
-	freeverb.setParameter(KWidth, 0.5f);
+	freeverb.setParameter(KWidth, 2.5f);
 
 	freeverb.process(inputs, outputs, sampleFrames);
+
+	//output the sine wave to wav file using libsndfile
+	SNDFILE *sndFile;
+	SF_INFO sfInfo;
+	sfInfo.samplerate = 44100;
+	sfInfo.channels = 2;
+	sfInfo.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
+	sfInfo.sections = 0;
+	sfInfo.seekable = 0;
+
+	sndFile = sf_open("freeverb.wav", SFM_WRITE, &sfInfo);
+
+	sf_write_float(sndFile, outputs[0], sampleFrames);
+	sf_write_float(sndFile, outputs[1], sampleFrames);
+
+	sf_close(sndFile);
 
 	for (i = 0; i < numInputs; i++)
 		delete [] inputs[i];
