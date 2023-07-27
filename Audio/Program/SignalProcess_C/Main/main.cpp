@@ -3,10 +3,11 @@
 #include <math.h>
 #include <sndfile.h>
 
-#include "reverb.h"
+#include "Reverb.h"
 #include "StereoSurround.h"
-#include "compressor.h"
+#include "Compressor.h"
 #include "SineWaveGenerator.h"
+#include "Freeverb.hpp"
 
 double* readWavFile(const char* filename, int* sampleNum, int* sampleRate, int* channels){
     // Open the input WAV file
@@ -96,10 +97,10 @@ void audioPlayer(void *signal, int onceprocessSamples, float sampleRate) {
     generateSineWave(inputSignal, onceprocessSamples, &processedSamples, risingTime, stayTime, cycleTime, sampleRate, minimumFreq, maximumFreq);
 }
 
-/*
+
 int signal_tester(void) {
     const float sampleRate = 48000;
-    const int signalTime = 10;
+    const int signalTime = 20;
     const int testSampleNum = sampleRate * signalTime;
 
     static double inputSignal_L[testSampleNum];
@@ -110,7 +111,10 @@ int signal_tester(void) {
     static double outputSignal_R[testSampleNum];
     static double outputSignal[testSampleNum * 2];
 
-    audioPlayer(inputSignal_L, testSampleNum, sampleRate);
+    audioPlayer(inputSignal_R, testSampleNum, sampleRate);
+    for (int i = 0; i < testSampleNum; i++) {
+        inputSignal_L[i] = inputSignal_R[i];
+    }
 
     // Apply 6dB gain to the output signal to compensate for the attenuation of the reverb effect
     // avoid Clipping distortion caused by the reverb effect in the same time
@@ -129,14 +133,14 @@ int signal_tester(void) {
     //outputSignal_L[5000] = 1;
 
     // Apply reverb to the output signal
-    physicalModelingReverbAlgorithm(outputSignal_L, testSampleNum, 5, 0.5, 0.5, 0.5);
+    //physicalModelingReverbAlgorithm(outputSignal_L, testSampleNum, 5, 0.5, 0.5, 0.5);
     
     // Apply compression to the output signal
-    compressor(outputSignal_L, testSampleNum, 0.9, 2.0);
-    compressor(outputSignal_R, testSampleNum, 0.9, 2.0);
+    //compressor(outputSignal_L, testSampleNum, 0.9, 2.0);
+    //compressor(outputSignal_R, testSampleNum, 0.9, 2.0);
     
     // Apply stereo surround to the output signal
-    surroundEffect(outputSignal_L, outputSignal_R, testSampleNum, sampleRate);
+    //surroundEffect(outputSignal_L, outputSignal_R, testSampleNum, sampleRate);
 
     for (int i = 0; i < testSampleNum; i++) {
         inputSignal[i * 2] = inputSignal_L[i];
@@ -154,7 +158,7 @@ int signal_tester(void) {
 
     return 0;
 }
-*/
+
 
 int signal_tester_2(const char* inputfilename_L, const char* inputfilename_R, const char* outputfilename) {
     int testSampleNum;
@@ -208,7 +212,7 @@ int signal_tester_2(const char* inputfilename_L, const char* inputfilename_R, co
 }
 
 int main() {
-    //signal_tester();
-    signal_tester_2("input_L.wav", "input_R.wav", "output.wav");
+    signal_tester();
+    //signal_tester_2("input_L.wav", "input_R.wav", "output.wav");
     return 0;
 }

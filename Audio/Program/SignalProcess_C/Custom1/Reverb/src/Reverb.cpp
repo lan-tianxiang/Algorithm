@@ -1,4 +1,4 @@
-#include "reverb.h"
+#include "Reverb.h"
 #include <stdlib.h> // Add this line to include stdlib.h
 #include <string.h>
 #include <math.h> // Add this line to include math.h

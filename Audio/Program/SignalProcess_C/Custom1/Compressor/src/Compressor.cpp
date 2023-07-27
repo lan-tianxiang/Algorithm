@@ -1,4 +1,4 @@
-#include "compressor.h"
+#include "Compressor.h"
 #include <math.h>
 
 void compressor(double *signal, int sampleNum, double threshold, double ratio) {
