@@ -22,4 +22,5 @@ add_library(${PARENT_PROJECT_DIR_NAME}::${CURRENT_PROJECT_DIR_NAME} ALIAS ${PROJ
 
 target_include_directories( ${PROJECT_NAME}
     PUBLIC ${PROJECT_SOURCE_DIR}/include
+    PUBLIC ${PARENT_PROJECT_SOURCE_DIR}/include
 )

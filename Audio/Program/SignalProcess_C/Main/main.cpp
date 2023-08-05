@@ -9,7 +9,7 @@
 #include "SineWaveGenerator.h"
 #include "Freeverb.hpp"
 
-double* readWavFile(const char* filename, int* sampleNum, int* sampleRate, int* channels){
+float* readWavFile(const char* filename, int* sampleNum, int* sampleRate, int* channels){
     // Open the input WAV file
     SF_INFO sfinfo;
     SNDFILE* wavfile = sf_open(filename, SFM_READ, &sfinfo);
@@ -19,8 +19,8 @@ double* readWavFile(const char* filename, int* sampleNum, int* sampleRate, int* 
     }
 
     // Read the samples from the input WAV file
-    double* signal = (double*)malloc(sizeof(double) * sfinfo.frames);
-    sf_count_t count = sf_read_double(wavfile, signal, sfinfo.frames);
+    float* signal = (float*)malloc(sizeof(float) * sfinfo.frames);
+    sf_count_t count = sf_read_float(wavfile, signal, sfinfo.frames);
     if (count != sfinfo.frames) {
         printf("Error reading samples from input WAV file\n");
         free(signal);
@@ -38,7 +38,7 @@ double* readWavFile(const char* filename, int* sampleNum, int* sampleRate, int* 
     return signal;
 }
 
-void writeWavFile(const char* wavFilename, double* signal, int sampleNum, int sampleRate, int channels) {
+void writeWavFile(const char* wavFilename, float* signal, int sampleNum, int sampleRate, int channels) {
     // Define the format of the output file
     SF_INFO sfinfo;
     sfinfo.samplerate = sampleRate;
@@ -53,7 +53,7 @@ void writeWavFile(const char* wavFilename, double* signal, int sampleNum, int sa
     }
 
     // Write the samples to the output WAV file
-    sf_count_t count = sf_write_double(wavfile, signal, sampleNum);
+    sf_count_t count = sf_write_float(wavfile, signal, sampleNum);
     if (count != (sf_count_t)sampleNum) {
         printf("Error writing samples to output WAV file %ld != %d\n", count, sampleNum);
         return;
@@ -80,8 +80,7 @@ void writeTxtFile(const char* filename, double* signal, int sampleNum) {
     fclose(txtfile);
 }
 
-void audioPlayer(void *signal, int onceprocessSamples, float sampleRate) {
-    float cycleTime = 15.0;//每个周期的时间
+void audioPlayer(void *signal, int onceprocessSamples, float sampleRate, float cycleTime) {
     float risingTime = cycleTime * 2.5 / 12.0;//上升时间
     float stayTime = cycleTime * 3.5 / 12.0;//保持时间
     float minimumFreq = 110;// 最低频率
@@ -93,7 +92,7 @@ void audioPlayer(void *signal, int onceprocessSamples, float sampleRate) {
     memset(signal, 0, onceprocessSamples * sizeof(int));
 
     // 生成信号
-    double* inputSignal = (double*)signal;
+    float* inputSignal = (float*)signal;
     generateSineWave(inputSignal, onceprocessSamples, &processedSamples, risingTime, stayTime, cycleTime, sampleRate, minimumFreq, maximumFreq);
 }
 
@@ -103,15 +102,15 @@ int signal_tester(void) {
     const int signalTime = 20;
     const int testSampleNum = sampleRate * signalTime;
 
-    static double inputSignal_L[testSampleNum];
-    static double inputSignal_R[testSampleNum];
-    static double inputSignal[testSampleNum * 2];
+    static float inputSignal_L[testSampleNum];
+    static float inputSignal_R[testSampleNum];
+    static float inputSignal[testSampleNum * 2];
 
-    static double outputSignal_L[testSampleNum];
-    static double outputSignal_R[testSampleNum];
-    static double outputSignal[testSampleNum * 2];
+    static float outputSignal_L[testSampleNum];
+    static float outputSignal_R[testSampleNum];
+    static float outputSignal[testSampleNum * 2];
 
-    audioPlayer(inputSignal_R, testSampleNum, sampleRate);
+    audioPlayer(inputSignal_R, testSampleNum, sampleRate, (float)signalTime/2.0);
     for (int i = 0; i < testSampleNum; i++) {
         inputSignal_L[i] = inputSignal_R[i];
     }
@@ -141,6 +140,22 @@ int signal_tester(void) {
     
     // Apply stereo surround to the output signal
     //surroundEffect(outputSignal_L, outputSignal_R, testSampleNum, sampleRate);
+    Freeverb* freeverb = new Freeverb();
+    freeverb->setParameter(KMode, 0.5);
+    freeverb->setParameter(KRoomSize, 0.5);
+    freeverb->setParameter(KDamp, 0.5);
+    freeverb->setParameter(KWet, 0.5);
+    freeverb->setParameter(KDry, 0.5);
+    freeverb->setParameter(KWidth, 0.5);
+
+    float** freeverbInputSignal = new float*[2];
+    float** freeverbOutputSignal = new float*[2];
+    freeverbInputSignal[0] = inputSignal_L;
+    freeverbInputSignal[1] = inputSignal_R;
+    freeverbOutputSignal[0] = outputSignal_L;
+    freeverbOutputSignal[1] = outputSignal_R;
+
+    freeverb->process(freeverbInputSignal, freeverbOutputSignal, testSampleNum);
 
     for (int i = 0; i < testSampleNum; i++) {
         inputSignal[i * 2] = inputSignal_L[i];
@@ -164,10 +179,10 @@ int signal_tester_2(const char* inputfilename_L, const char* inputfilename_R, co
     int testSampleNum;
     int sampleRate;
     int channels;
-    double* inputSignal_L = readWavFile(inputfilename_L, &testSampleNum, &sampleRate, &channels);
-    double* inputSignal_R = readWavFile(inputfilename_R, &testSampleNum, &sampleRate, &channels);
+    float* inputSignal_L = readWavFile(inputfilename_L, &testSampleNum, &sampleRate, &channels);
+    float* inputSignal_R = readWavFile(inputfilename_R, &testSampleNum, &sampleRate, &channels);
 
-    static double outputSignal[48000*240 * 2];
+    static float outputSignal[48000*240 * 2];
     
     if (!inputSignal_L || !inputSignal_R) {
         printf("Error reading input WAV file\n");
@@ -181,13 +196,13 @@ int signal_tester_2(const char* inputfilename_L, const char* inputfilename_R, co
         inputSignal_R[i] *= 0.5;
     }
 
-    memset(inputSignal_L, 0, testSampleNum * sizeof(double));
-    memset(inputSignal_R, 0, testSampleNum * sizeof(double));
+    memset(inputSignal_L, 0, testSampleNum * sizeof(float));
+    memset(inputSignal_R, 0, testSampleNum * sizeof(float));
     inputSignal_L[5000] = 0.9f;
-    memset(outputSignal, 0, 48000*240 * 2 * sizeof(double));
+    memset(outputSignal, 0, 48000*240 * 2 * sizeof(float));
     
     // Apply reverb to the output signal
-    double* inputSignal_123 = NULL;
+    float* inputSignal_123 = NULL;
     inputSignal_123 = physicalModelingReverbAlgorithm(inputSignal_L, testSampleNum, 5, 0.5, 0.5, 0.5, 0.5);
     
     // Apply stereo surround to the output signal

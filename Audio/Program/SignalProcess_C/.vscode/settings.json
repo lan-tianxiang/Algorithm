@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "stdio.h": "c",
-        "generatesinewave.h": "c"
+        "generatesinewave.h": "c",
+        "*.tcc": "cpp"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

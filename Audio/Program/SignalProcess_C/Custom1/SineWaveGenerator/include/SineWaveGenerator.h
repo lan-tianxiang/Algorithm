@@ -16,7 +16,7 @@ extern "C" {
  * @param maximumFreq 最大频率
  * @return void
 *******************************************************************************************/
-void generateSineWave(double *signal, int onceprocessSamples, int *processedSamples, float risingTime, float stayTime, float cycleTime, float sampleRate, float minimumFreq, float maximumFreq);
+void generateSineWave(float *signal, int onceprocessSamples, int *processedSamples, float risingTime, float stayTime, float cycleTime, float sampleRate, float minimumFreq, float maximumFreq);
 }
 #endif//__cplusplus
 

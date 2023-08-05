@@ -72,7 +72,7 @@ int calculateNumReflections(float distanceToLine, float distanceToWall, float re
     return (int)totalReflections;
 }
 
-double* physicalModelingReverbAlgorithm(const double* inputSignal, int inputSignalSize, float roomWidth, float roomHeight, float roomDepth, float reflectionCoefficient, int numReflectionLines) {
+float* physicalModelingReverbAlgorithm(const float* inputSignal, int inputSignalSize, float roomWidth, float roomHeight, float roomDepth, float reflectionCoefficient, int numReflectionLines) {
     // 生成延迟线的位置
     float* reflectionLinePositions = (float*)malloc(numReflectionLines * 2 * sizeof(float));
     for (int i = 0; i < numReflectionLines; i++) {
@@ -91,7 +91,7 @@ double* physicalModelingReverbAlgorithm(const double* inputSignal, int inputSign
     }
 
     // 计算每条延迟线的反射次数和衰减量
-    double* outputSignal = (double*)malloc(inputSignalSize * sizeof(double));
+    float* outputSignal = (float*)malloc(inputSignalSize * sizeof(float));
     for (int i = 0; i < inputSignalSize; i++) {
         outputSignal[i] = 0.0f;
     }

@@ -15,7 +15,7 @@ extern "C" {
  * @param numReflectionLines 反射线的数量
  * @return float* 返回混响后的信号
 *******************************************************************************************/
-double* physicalModelingReverbAlgorithm(const double* inputSignal, int inputSignalSize, float roomWidth, float roomHeight, float roomDepth, float reflectionCoefficient, int numReflectionLines);
+float* physicalModelingReverbAlgorithm(const float* inputSignal, int inputSignalSize, float roomWidth, float roomHeight, float roomDepth, float reflectionCoefficient, int numReflectionLines);
 }
 #endif//__cplusplus
 

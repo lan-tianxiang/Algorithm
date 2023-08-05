@@ -44,7 +44,7 @@ float sinf_approximate(float x) {
 //其中onceprocessSamples为单次处理样本数，processedSamples为已处理样本数，risingTime为上升时间，stayTime为保持时间，cycleTime为一个周期的时间，sampleRate为采样率，minimumFreq为最低频率，maximumFreq为最高频率。
 //该函数会生成一个完整周期的正弦波信号，正弦波的频率随着processedSamples数的增加而增加，processedSamples数到达risingSamples时达到最大频率，接着保持最大频率stayTime时间，
 //接着正弦波的频率随着processedSamples数的增加而减小，processedSamples数到达cycleSamples时达到最小频率频率。
-void generateSineWave(double *signal, int onceprocessSamples, int *processedSamples, float risingTime, float stayTime, float cycleTime, float sampleRate, float minimumFreq, float maximumFreq) {
+void generateSineWave(float *signal, int onceprocessSamples, int *processedSamples, float risingTime, float stayTime, float cycleTime, float sampleRate, float minimumFreq, float maximumFreq) {
     int risingSamples = (int)(risingTime * sampleRate);
     int staySamples = (int)(stayTime * sampleRate);
     int cycleSamples = (int)(cycleTime * sampleRate);
@@ -74,7 +74,7 @@ void generateSineWave(double *signal, int onceprocessSamples, int *processedSamp
         while (currentPhase < -2 * PI) {
             currentPhase += 2 * PI;
         }
-        signal[i] = (double)(amplitude * sinf(currentPhase));
+        signal[i] = (float)(amplitude * sinf(currentPhase));
         *processedSamples %= cycleSamples;
     }
 }

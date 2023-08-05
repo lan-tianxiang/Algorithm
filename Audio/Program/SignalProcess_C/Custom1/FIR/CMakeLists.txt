@@ -15,11 +15,3 @@ cmake_path(GET PARENT_PROJECT_SOURCE_DIR FILENAME PARENT_PROJECT_DIR_NAME)
 
 # Set the project name
 project (${PARENT_PROJECT_DIR_NAME}_${CURRENT_PROJECT_DIR_NAME})
-
-# Add a library with the above sources
-add_library(${PROJECT_NAME} src/${CURRENT_PROJECT_DIR_NAME}.cpp)
-add_library(${PARENT_PROJECT_DIR_NAME}::${CURRENT_PROJECT_DIR_NAME} ALIAS ${PROJECT_NAME})
-
-target_include_directories( ${PROJECT_NAME}
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
-)

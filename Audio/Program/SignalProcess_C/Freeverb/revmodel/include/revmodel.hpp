@@ -1,6 +1,5 @@
 #ifndef _revmodel_
 #define _revmodel_
-
 #include "comb.hpp"
 #include "allpass.hpp"
 #include "tuning.h"
