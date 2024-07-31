@@ -1,0 +1,5 @@
+# project_config.gni
+
+# 定义变量区域
+
+use_shared_implementation = true

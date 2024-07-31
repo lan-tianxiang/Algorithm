@@ -1,0 +1,10 @@
+# global_defines.gni
+
+# 引用 project_config.gni 文件
+import("//config/project_config.gni")
+
+# 定义一个包含宏定义的列表
+global_defines = []
+if (use_shared_implementation == true) {
+  global_defines += [ "HELLO_SHARED_IMPLEMENTATION" ]
+}

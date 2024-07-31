@@ -1,0 +1,10 @@
+# global_config.gni
+
+# 引用 project_config.gni 文件
+import("//config/project_config.gni")
+
+# 引用 config.gni 文件
+import("//config/config.gni")
+
+# 引用 global_defines.gni 文件
+import("//config/global_defines.gni")

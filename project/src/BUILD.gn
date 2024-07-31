@@ -1,0 +1,25 @@
+# Copyright 2014 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# 引用 config.gni 文件
+import("//config/global_config.gni")
+
+defines = global_defines
+include_dirs += [ "deque" ]
+sources += [ "test.c" ]
+
+source_set("source_src") {
+  print("source_src:$sources")
+  deps += [ "deque:source_deque" ]
+}
+
+shared_library("shared_src") {
+  print("shared_deque:$sources")
+  deps += [ "deque:shared_deque" ]
+}
+
+static_library("static_src") {
+  print("static_deque:$sources")
+  deps += [ "deque:static_deque" ]
+}

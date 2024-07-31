@@ -1,0 +1,43 @@
+# config.gni
+
+# 定义一个全局配置
+global_config = []
+
+# 定义一个依赖项
+deps = []
+
+# 定义一个源文件
+sources = []
+
+# 定义一个宏定义
+defines = []
+
+# 定义include_dirs
+include_dirs = []
+
+# 定义cflags
+cflags = [ "-fPIC", "-pthread" ]
+
+# 定义cflags_cc
+cflags_cc = []                                                                                                                                           
+
+# 定义ldflags
+ldflags = []
+
+# 定义libs
+libs = []
+
+# 定义frameworks
+# frameworks = []
+
+# 定义swiftmodules
+# swiftmodules = []
+
+# 定义output_extension
+# output_extension = ""
+
+# 定义output_dir
+# output_dir = ""
+
+# 定义target_output_name
+# target_output_name = ""
