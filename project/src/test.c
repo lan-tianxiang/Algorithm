@@ -7,7 +7,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "deque.h" // 假设双端队列的实现放在 deque.h 和 deque.c 中
+#include "deque_array.h"
+#include "deque.h"
 
 void testInsertFront() {
     Deque* deque = createDeque(5);
@@ -64,14 +65,14 @@ void testGetRear() {
 }
 
 int main() {
+    printf("\n\n");
     testInsertFront();
     testInsertRear();
     testDeleteFront();
     testDeleteRear();
     testGetFront();
     testGetRear();
-#ifdef HELLO_SHARED_IMPLEMENTATION
-    printf("Hello from shared implementation!\n");
-#endif
+
+    // tuiasbdiasu();
     return 0;
 }

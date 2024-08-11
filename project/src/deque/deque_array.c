@@ -5,7 +5,7 @@
     AUTHOR: lan-tianxiang
 */
 
-#include "deque.h"
+#include "deque_array.h"
 #include <stdio.h>
 #include <stdlib.h>
 

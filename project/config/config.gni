@@ -16,13 +16,16 @@ defines = []
 include_dirs = []
 
 # 定义cflags
-cflags = [ "-fPIC", "-pthread" ]
+cflags = [  "-fPIC",
+            "-pthread"
+]
 
 # 定义cflags_cc
-cflags_cc = []                                                                                                                                           
+cflags_cc = []
 
 # 定义ldflags
-ldflags = []
+ldflags = [
+]
 
 # 定义libs
 libs = []
@@ -35,9 +38,3 @@ libs = []
 
 # 定义output_extension
 # output_extension = ""
-
-# 定义output_dir
-# output_dir = ""
-
-# 定义target_output_name
-# target_output_name = ""

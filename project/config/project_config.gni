@@ -1,5 +1,9 @@
 # project_config.gni
 
-# 定义变量区域
+# 定义一个包含宏定义的列表
+global_defines = []
 
-use_shared_implementation = true
+# 定义变量区域
+# 定义输出的库文件类型 a:静态库 so:动态库 none:不输出
+output_lib_file_type = "so"
+global_defines += [ "LIB_IMPLEMENTATION_TYPE=\"${output_lib_file_type}\"" ]

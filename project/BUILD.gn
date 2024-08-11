@@ -3,16 +3,15 @@
 # found in the LICENSE file.
 
 # 引用 config.gni 文件
-import("//config/global_config.gni")
+import("//config/config.gni")
+
+# 引用 project_config.gni 文件
+import("//config/project_config.gni")
 
 defines += global_defines
 include_dirs += []
 sources += []
 
 executable("myapp") {
-  if (use_shared_implementation == false) {
-    deps += [ "src:static_src" ]
-  } else {
-    deps += [ "src:source_src" ]
-  }
+  deps += [ "src:src" ]
 }

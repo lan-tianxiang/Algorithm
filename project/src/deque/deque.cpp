@@ -15,7 +15,8 @@ struct MyStruct {
     std::string name;
 };
 
-int main() {
+int tuiasbdiasu(void)
+{
     // 默认构造函数
     std::deque<int> deque1;
 

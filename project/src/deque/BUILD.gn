@@ -3,22 +3,26 @@
 # found in the LICENSE file.
 
 # 引用 config.gni 文件
-import("//config/global_config.gni")
+import("//config/config.gni")
+
+# 引用 project_config.gni 文件
+import("//config/project_config.gni")
 
 defines = global_defines
 sources += [
   "deque_array.c",
-  "deque.h",
 ]
 
-source_set("source_deque") {
-  print("source_deque:$sources")
-}
-
-shared_library("shared_deque") {
-  print("shared_deque:$sources")
-}
-
-static_library("static_deque") {
-  print("static_deque:$sources")
+if (output_lib_file_type == "a") {
+    static_library("deque") {
+      print("deque:$sources")
+    }
+} else if (output_lib_file_type == "so") {
+    shared_library("deque") {
+      print("deque:$sources")
+    }
+} else if (output_lib_file_type == "none") {
+    source_set("deque") {
+      print("deque:$sources")
+    }
 }
