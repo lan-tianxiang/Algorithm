@@ -29,13 +29,13 @@ Deque* createDeque(int size) {
 }
 
 // 检查双端队列是否已满
-static int isFull(Deque* deque) {
+static inline int isFull(Deque* deque) {
     return ((deque->front == 0 && deque->rear == deque->size - 1) || 
             deque->front == deque->rear + 1);
 }
 
 // 检查双端队列是否为空
-static int isEmpty(Deque* deque) {
+static inline int isEmpty(Deque* deque) {
     return (deque->front == -1);
 }
 

@@ -13,7 +13,6 @@ include_dirs += [ "deque" ]
 sources += [ "test.c" ]
 
 source_set("src") {
-
   print("src:$sources")
   deps += [ "deque:deque" ]
 }

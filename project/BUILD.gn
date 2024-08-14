@@ -12,6 +12,11 @@ defines += global_defines
 include_dirs += []
 sources += []
 
+project_pre_lds_files_path = rebase_path("project_build.lds", root_build_dir)
+project_lds_ldflags = [ "-T", project_pre_lds_files_path ]
+print("project_lds_ldflags: $project_lds_ldflags")
+
 executable("myapp") {
+  #ldflags += project_lds_ldflags
   deps += [ "src:src" ]
 }

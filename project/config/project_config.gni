@@ -5,5 +5,5 @@ global_defines = []
 
 # 定义变量区域
 # 定义输出的库文件类型 a:静态库 so:动态库 none:不输出
-output_lib_file_type = "so"
+output_lib_file_type = "none"
 global_defines += [ "LIB_IMPLEMENTATION_TYPE=\"${output_lib_file_type}\"" ]
