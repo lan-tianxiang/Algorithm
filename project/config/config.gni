@@ -13,7 +13,13 @@ sources = []
 defines = []
 
 # 定义include_dirs
-include_dirs = []
+include_dirs = [
+    "//src/deque",
+    "//src/thread",
+    "//src/timer",
+
+    "//src/open_source/jemalloc",
+]
 
 # 定义cflags
 cflags = [  "-fPIC",

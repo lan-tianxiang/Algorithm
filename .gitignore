@@ -1,5 +1,10 @@
+#temporary files which are generated
 *.wav
 *.a
 *.o
 
+#temporary floder which are generated
 out
+
+#project name
+./webrtc

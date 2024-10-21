@@ -44,7 +44,7 @@ build_func() {
     cd $code_path
     $tool_gn_path gen $out_path/$outname
     $tool_ninja_path -C $out_path/$outname -j 32
-    $tool_objdump_path -d -s -x -t -r -D -S -g -h -C -f -p $out_path/$outname/$outname > $out_path/$outname/$outname.lst
+    $tool_objdump_path -d -s -x -t -r -D -S -g -h -C -f -p -l $out_path/$outname/$outname > $out_path/$outname/$outname.lst
     echo_with_color green "Build success! spend : $(($(($(date +%s%N)/1000000)) - $start_time_in_ms)) ms"
 }
 
@@ -71,7 +71,9 @@ case $1 in
         clean_func
         ;;
     *)
-        echo "Usage: $0 {build|run|clean}"
+        echo_with_color red "Usage: $0 {build|run|clean}"
+        build_func
+        run_func
         clean_func
         exit 1
         ;;

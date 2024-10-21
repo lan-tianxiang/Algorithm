@@ -47,6 +47,10 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "time.h": "c",
-        "signal.h": "c"
+        "signal.h": "c",
+        "stddef.h": "c",
+        "thread.h": "c",
+        "deque_array.h": "c",
+        "stdio.h": "c"
     }
 }

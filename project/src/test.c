@@ -1,78 +1,55 @@
 /*
     FILE NAME: test.c
-    PURPOSE: Test file for Deque using Array
+    PURPOSE: Test file
     DATE: 2024/08/01
     AUTHOR: lan-tianxiang
 */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
 #include "deque_array.h"
-#include "deque.h"
+#include "thread.h"
+#include "soft_timer.h"
 
-void testInsertFront() {
-    Deque* deque = createDeque(5);
-    insertFront(deque, 10);
-    insertFront(deque, 20);
-    insertFront(deque, 30);
-    printf("Front element after insertFront operations: %d\n", getFront(deque)); // 应该输出 30
-    freeDeque(deque);
+void timer_handler(union sigval arg) {
+    static int count = 0;
+    // while (1)
+    {
+        /* code */
+        printf("Timer expired %d\n", count++);
+        sleep(1);
+    }
 }
 
-void testInsertRear() {
-    Deque* deque = createDeque(5);
-    insertRear(deque, 10);
-    insertRear(deque, 20);
-    insertRear(deque, 30);
-    printf("Rear element after insertRear operations: %d should be 30\n", getRear(deque)); // 应该输出 30
-    freeDeque(deque);
-}
-
-void testDeleteFront() {
-    Deque* deque = createDeque(5);
-    insertRear(deque, 10);
-    insertRear(deque, 20);
-    insertRear(deque, 30);
-    deleteFront(deque);
-    printf("Front element after deleteFront operation: %d should be 20\n", getFront(deque)); // 应该输出 20
-    freeDeque(deque);
-}
-
-void testDeleteRear() {
-    Deque* deque = createDeque(5);
-    insertRear(deque, 10);
-    insertRear(deque, 20);
-    insertRear(deque, 30);
-    deleteRear(deque);
-    printf("Rear element after deleteRear operation: %d should be 20\n", getRear(deque)); // 应该输出 20
-    freeDeque(deque);
-}
-
-void testGetFront() {
-    Deque* deque = createDeque(5);
-    insertRear(deque, 10);
-    insertRear(deque, 20);
-    printf("Front element: %d should be 10\n", getFront(deque)); // 应该输出 10
-    freeDeque(deque);
-}
-
-void testGetRear() {
-    Deque* deque = createDeque(5);
-    insertRear(deque, 10);
-    insertRear(deque, 20);
-    printf("Rear element: %d should be 20\n", getRear(deque)); // 应该输出 20
-    freeDeque(deque);
+void* thread_handler(void* arg) {
+    printf("Thread started\n");
+    soft_timer_attr_t attr = {
+        .timer_handler = timer_handler,
+        .interval = 1,
+        .repeat = 1
+    };
+    create_and_run_timer(&attr);
+    sleep(5);
+    delete_timer(&attr);
+    printf("Thread ended\n");
 }
 
 int main() {
     printf("\n\n");
-    testInsertFront();
-    testInsertRear();
-    testDeleteFront();
-    testDeleteRear();
-    testGetFront();
-    testGetRear();
+    
+    thread_attr_t attr = {
+        .stack_size = 1024 * 1024,
+        .schedpolicy = SCHED_FIFO,
+        .priority = 99,
+        .thread_func = thread_handler,
+        .arg = NULL
+    };
+    create_and_run_thread(&attr);
 
-    // tuiasbdiasu();
+    sleep(10);
+
     return 0;
 }

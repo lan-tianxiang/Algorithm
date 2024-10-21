@@ -8,15 +8,16 @@
 #include "deque_array.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // 创建一个双端队列
-Deque* createDeque(int size) {
+Deque* createDeque(int elementNum, int elementSize) {
     Deque* deque = (Deque*)malloc(sizeof(Deque));
     if (!deque) {
         printf("Memory allocation failed\n");
         return NULL;
     }
-    deque->arr = (int*)malloc(size * sizeof(int));
+    deque->arr = (void*)malloc(elementNum * elementSize);
     if (!deque->arr) {
         printf("Memory allocation failed\n");
         free(deque);
@@ -24,13 +25,14 @@ Deque* createDeque(int size) {
     }
     deque->front = -1;
     deque->rear = 0;
-    deque->size = size;
+    deque->elementNum = elementNum;
+    deque->elementSize = elementSize;
     return deque;
 }
 
 // 检查双端队列是否已满
 static inline int isFull(Deque* deque) {
-    return ((deque->front == 0 && deque->rear == deque->size - 1) || 
+    return ((deque->front == 0 && deque->rear == deque->elementNum - 1) || 
             deque->front == deque->rear + 1);
 }
 
@@ -40,7 +42,7 @@ static inline int isEmpty(Deque* deque) {
 }
 
 // 在队列前端插入元素
-void insertFront(Deque* deque, int key) {
+void insertFront(Deque* deque, void* element) {
     if (isFull(deque)) {
         printf("Overflow\n");
         return;
@@ -50,16 +52,16 @@ void insertFront(Deque* deque, int key) {
         deque->front = 0;
         deque->rear = 0;
     } else if (deque->front == 0) {
-        deque->front = deque->size - 1;
+        deque->front = deque->elementNum - 1;
     } else {
         deque->front = deque->front - 1;
     }
 
-    deque->arr[deque->front] = key;
+    memcpy((char*)deque->arr + deque->front * deque->elementSize, element, deque->elementSize);
 }
 
 // 在队列后端插入元素
-void insertRear(Deque* deque, int key) {
+void insertRear(Deque* deque, void* element) {
     if (isFull(deque)) {
         printf("Overflow\n");
         return;
@@ -68,13 +70,13 @@ void insertRear(Deque* deque, int key) {
     if (deque->front == -1) {
         deque->front = 0;
         deque->rear = 0;
-    } else if (deque->rear == deque->size - 1) {
+    } else if (deque->rear == deque->elementNum - 1) {
         deque->rear = 0;
     } else {
         deque->rear = deque->rear + 1;
     }
 
-    deque->arr[deque->rear] = key;
+    memcpy((char*)deque->arr + deque->rear * deque->elementSize, element, deque->elementSize);
 }
 
 // 从队列前端删除元素
@@ -87,7 +89,7 @@ void deleteFront(Deque* deque) {
     if (deque->front == deque->rear) {
         deque->front = -1;
         deque->rear = -1;
-    } else if (deque->front == deque->size - 1) {
+    } else if (deque->front == deque->elementNum - 1) {
         deque->front = 0;
     } else {
         deque->front = deque->front + 1;
@@ -105,28 +107,28 @@ void deleteRear(Deque* deque) {
         deque->front = -1;
         deque->rear = -1;
     } else if (deque->rear == 0) {
-        deque->rear = deque->size - 1;
+        deque->rear = deque->elementNum - 1;
     } else {
         deque->rear = deque->rear - 1;
     }
 }
 
 // 获取队列前端的元素
-int getFront(Deque* deque) {
+void* getFront(Deque* deque) {
     if (isEmpty(deque)) {
         printf("Queue Underflow\n");
-        return -1;
+        return NULL;
     }
-    return deque->arr[deque->front];
+    return (char*)deque->arr + deque->front * deque->elementSize;
 }
 
 // 获取队列后端的元素
-int getRear(Deque* deque) {
+void* getRear(Deque* deque) {
     if (isEmpty(deque) || deque->rear < 0) {
         printf("Queue Underflow\n");
-        return -1;
+        return NULL;
     }
-    return deque->arr[deque->rear];
+    return (char*)deque->arr + deque->rear * deque->elementSize;
 }
 
 // 释放双端队列
@@ -137,4 +139,11 @@ void freeDeque(Deque* deque) {
         }
         free(deque);
     }
+}
+
+void printElement(void* element, int elementSize) {
+    for (int i = 0; i < elementSize; i++) {
+        printf("%02x ", ((unsigned char*)element)[i]);
+    }
+    printf("\n");
 }

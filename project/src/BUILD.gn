@@ -9,10 +9,14 @@ import("//config/config.gni")
 import("//config/project_config.gni")
 
 defines = global_defines
-include_dirs += [ "deque" ]
+include_dirs += []
 sources += [ "test.c" ]
 
 source_set("src") {
   print("src:$sources")
-  deps += [ "deque:deque" ]
+  deps += [ 
+    "deque:deque",
+    "thread:thread",
+    "timer:timer",
+  ]
 }

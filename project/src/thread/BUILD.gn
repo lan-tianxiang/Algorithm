@@ -1,0 +1,28 @@
+# Copyright 2014 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# 引用 config.gni 文件
+import("//config/config.gni")
+
+# 引用 project_config.gni 文件
+import("//config/project_config.gni")
+
+defines = global_defines
+sources += [
+  "thread.c",
+]
+
+if (output_lib_file_type == "a") {
+    static_library("thread") {
+      print("thread:$sources")
+    }
+} else if (output_lib_file_type == "so") {
+    shared_library("thread") {
+      print("thread:$sources")
+    }
+} else if (output_lib_file_type == "none") {
+    source_set("thread") {
+      print("thread:$sources")
+    }
+}
