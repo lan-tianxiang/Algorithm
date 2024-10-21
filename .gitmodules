@@ -1,0 +1,6 @@
+[submodule "project/src/open_source/webrtc"]
+	path = project/src/open_source/webrtc
+	url = https://webrtc.googlesource.com/src
+[submodule "project/src/open_source/jemalloc"]
+	path = project/src/open_source/jemalloc
+	url = https://github.com/jemalloc/jemalloc.git
