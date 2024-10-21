@@ -23,7 +23,18 @@ include_dirs = [
 
 # 定义cflags
 cflags = [  "-fPIC",
-            "-pthread"
+            "-pthread",
+            "-Wall",
+            "-Werror",
+            "-Wno-unused-variable",
+            "-Wno-unused-function",
+            "-Wno-unused-parameter",
+            "-Wno-unused-but-set-variable",
+            "-Wno-unused-value",
+            "-Wno-unused-label",
+            "-Wno-unused-local-typedefs",
+            "-Wno-unused-private-field",
+            "-Wno-unused-const-variable",
 ]
 
 # 定义cflags_cc

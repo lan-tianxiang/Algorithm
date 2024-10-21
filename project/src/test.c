@@ -35,6 +35,8 @@ void* thread_handler(void* arg) {
     sleep(5);
     delete_timer(&attr);
     printf("Thread ended\n");
+
+    // return NULL;
 }
 
 int main() {
