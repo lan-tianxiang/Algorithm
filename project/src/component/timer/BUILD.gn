@@ -12,15 +12,21 @@ defines = global_defines
 include_dirs += [
 ]
 sources += [
-  "main.c"
+  "soft_timer.c",
 ]
 deps += [ 
 ]
 
-source_set("src") {
-  print("src:$sources")
-  deps += [ 
-    "audio:audio",
-    "component:component",
-  ]
+if (output_lib_file_type == "a") {
+    static_library("timer") {
+      print("timer:$sources")
+    }
+} else if (output_lib_file_type == "so") {
+    shared_library("timer") {
+      print("timer:$sources")
+    }
+} else if (output_lib_file_type == "none") {
+    source_set("timer") {
+      print("timer:$sources")
+    }
 }

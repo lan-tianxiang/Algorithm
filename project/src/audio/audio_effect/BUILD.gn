@@ -9,20 +9,25 @@ import("//config/config.gni")
 import("//config/project_config.gni")
 
 defines = global_defines
+include_dirs += [
+]
 sources += [
-  "soft_timer.c",
+  "audio_effect.c",
+]
+deps += [
+  "effect_module:effect_module",
 ]
 
 if (output_lib_file_type == "a") {
-    static_library("timer") {
-      print("timer:$sources")
+    static_library("audio_effect") {
+      print("audio_effect:$sources")
     }
 } else if (output_lib_file_type == "so") {
-    shared_library("timer") {
-      print("timer:$sources")
+    shared_library("audio_effect") {
+      print("audio_effect:$sources")
     }
 } else if (output_lib_file_type == "none") {
-    source_set("timer") {
-      print("timer:$sources")
+    source_set("audio_effect") {
+      print("audio_effect:$sources")
     }
 }

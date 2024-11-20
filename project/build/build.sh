@@ -1,5 +1,5 @@
 # 路径设定
-root_path=$(cd `dirname $0`; pwd)/..
+root_path=$(dirname "$(cd "$(dirname "$0")"; pwd)")
 outname=$root_path
 out_path=$root_path
 code_path=$root_path
@@ -37,25 +37,19 @@ echo_current_time() {
 
 move_build_file_func() {
     cd $build_path
-    local temp_path=$build_path/out
 
-    mkdir -p $temp_path
     mkdir -p $out_path
-
-    mv $outname             $temp_path/
-    mv $outname.lst         $temp_path/
-    mv $outname.map         $temp_path/
-    mv obj                  $temp_path/
-    mv .ninja_deps          $temp_path/
-    mv .ninja_log           $temp_path/
-    mv args.gn              $temp_path/
-    mv build.ninja          $temp_path/
-    mv build.ninja.d        $temp_path/
-    mv build.ninja.stamp    $temp_path/
-    mv toolchain.ninja      $temp_path/
-
-    cp -rf $temp_path $out_path
-    rm -rf $temp_path
+    mv $outname             $out_path/
+    mv $outname.lst         $out_path/
+    mv $outname.map         $out_path/
+    mv obj                  $out_path/
+    mv .ninja_deps          $out_path/
+    mv .ninja_log           $out_path/
+    mv args.gn              $out_path/
+    mv build.ninja          $out_path/
+    mv build.ninja.d        $out_path/
+    mv build.ninja.stamp    $out_path/
+    mv toolchain.ninja      $out_path/
 }
 
 build_func() {
@@ -63,7 +57,7 @@ build_func() {
     # 生成编译文件
     $tool_gn_path gen $build_path
     $tool_ninja_path -C $build_path -j 32
-    $tool_objdump_path -d -s -x -t -r -D -S -g -h -C -f -p -l $outname > $outname.lst
+    $tool_objdump_path --source --all-headers --line-numbers --demangle --file-headers --disassemble --reloc --syms --dynamic-syms --section-headers --wide $outname > $outname.lst
     move_build_file_func
     echo_with_color green "Build success! spend : $(($(($(date +%s%N)/1000000)) - $start_time_in_ms)) ms"
 }
@@ -98,19 +92,17 @@ main_func() {
     init_vars_func
     case $1 in
         build)
+            clean_func
             build_func
             ;;
         run)
             run_func
             ;;
-        clean)
-            clean_func
-            ;;
         *)
-            echo_with_color red "Usage: $0 {build|run|clean}"
+            echo_with_color red "Usage: $0 {build|run}"
+            clean_func
             build_func
             run_func
-            clean_func
             exit 1
             ;;
     esac

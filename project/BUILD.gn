@@ -9,8 +9,10 @@ import("//config/config.gni")
 import("//config/project_config.gni")
 
 defines += global_defines
-include_dirs += []
-sources += []
+include_dirs += [
+]
+sources += [
+]
 
 project_pre_lds_files_path = rebase_path("project_build.lds", root_build_dir)
 project_lds_ldflags = [ "-T", project_pre_lds_files_path ]

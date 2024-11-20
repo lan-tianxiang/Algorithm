@@ -51,6 +51,7 @@
         "stddef.h": "c",
         "thread.h": "c",
         "deque_array.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "deque_list.h": "c"
     }
 }

@@ -12,15 +12,21 @@ defines = global_defines
 include_dirs += [
 ]
 sources += [
-  "main.c"
+  "thread.c",
 ]
 deps += [ 
 ]
 
-source_set("src") {
-  print("src:$sources")
-  deps += [ 
-    "audio:audio",
-    "component:component",
-  ]
+if (output_lib_file_type == "a") {
+    static_library("thread") {
+      print("thread:$sources")
+    }
+} else if (output_lib_file_type == "so") {
+    shared_library("thread") {
+      print("thread:$sources")
+    }
+} else if (output_lib_file_type == "none") {
+    source_set("thread") {
+      print("thread:$sources")
+    }
 }

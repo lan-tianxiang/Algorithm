@@ -12,15 +12,21 @@ defines = global_defines
 include_dirs += [
 ]
 sources += [
-  "main.c"
 ]
-deps += [ 
+deps += [
+  "audio_effect:audio_effect",
 ]
 
-source_set("src") {
-  print("src:$sources")
-  deps += [ 
-    "audio:audio",
-    "component:component",
-  ]
+if (output_lib_file_type == "a") {
+    static_library("audio") {
+      print("audio:$sources")
+    }
+} else if (output_lib_file_type == "so") {
+    shared_library("audio") {
+      print("audio:$sources")
+    }
+} else if (output_lib_file_type == "none") {
+    source_set("audio") {
+      print("audio:$sources")
+    }
 }

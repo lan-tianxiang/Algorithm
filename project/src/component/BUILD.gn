@@ -9,20 +9,27 @@ import("//config/config.gni")
 import("//config/project_config.gni")
 
 defines = global_defines
+include_dirs += [
+]
 sources += [
-  "deque_array.c",
+]
+deps += [
+    "circle_fifo:circle_fifo",
+    "deque:deque",
+    "thread:thread",
+    "timer:timer",
 ]
 
 if (output_lib_file_type == "a") {
-    static_library("deque") {
-      print("deque:$sources")
+    static_library("component") {
+      print("component:$sources")
     }
 } else if (output_lib_file_type == "so") {
-    shared_library("deque") {
-      print("deque:$sources")
+    shared_library("component") {
+      print("component:$sources")
     }
 } else if (output_lib_file_type == "none") {
-    source_set("deque") {
-      print("deque:$sources")
+    source_set("component") {
+      print("component:$sources")
     }
 }

@@ -1,0 +1,1 @@
+1、在deque.c文件中，构建组件，用于统一deque_array.c和deque_list.c的接口，使得deque_array.c和deque_list.c可以共用同一个接口，从而实现deque的多态。

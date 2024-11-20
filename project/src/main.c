@@ -10,12 +10,14 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "deque_array.h"
+#include "circle_fifo.h"
+#include "deque.h"
 #include "thread.h"
 #include "soft_timer.h"
 
+static int count = 0;
+
 void timer_handler(union sigval arg) {
-    static int count = 0;
     // while (1)
     {
         /* code */
@@ -32,11 +34,14 @@ void* thread_handler(void* arg) {
         .repeat = 1
     };
     create_and_run_timer(&attr);
-    sleep(5);
+    while (count < 10)
+    {
+    }
+    printf("Thread expired %d\n", count);
     delete_timer(&attr);
     printf("Thread ended\n");
 
-    // return NULL;
+    return NULL;
 }
 
 int main() {
@@ -51,7 +56,8 @@ int main() {
     };
     create_and_run_thread(&attr);
 
-    sleep(10);
+    while(1) {
+    }
 
     return 0;
 }

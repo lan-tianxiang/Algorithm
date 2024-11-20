@@ -14,9 +14,12 @@ defines = []
 
 # 定义include_dirs
 include_dirs = [
-    "//src/deque",
-    "//src/thread",
-    "//src/timer",
+    "//src/component/circle_fifo",
+    "//src/component/deque",
+    "//src/component/thread",
+    "//src/component/timer",
+
+    "//src/audio/audio_effect",
 
     "//src/open_source/jemalloc",
 ]
@@ -37,8 +40,15 @@ cflags = [  "-fPIC",
             "-Wno-unused-const-variable",
 ]
 
+# 定义cflags_c
+cflags_c = [
+    "-g" # 调试信息
+]
+
 # 定义cflags_cc
-cflags_cc = []
+cflags_cc = [
+    "-g" # 调试信息
+]
 
 # 定义ldflags
 ldflags = [

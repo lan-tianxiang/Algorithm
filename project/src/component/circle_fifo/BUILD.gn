@@ -9,20 +9,24 @@ import("//config/config.gni")
 import("//config/project_config.gni")
 
 defines = global_defines
+include_dirs += [
+]
 sources += [
-  "thread.c",
+  "circle_fifo.c",
+]
+deps += [ 
 ]
 
 if (output_lib_file_type == "a") {
-    static_library("thread") {
-      print("thread:$sources")
+    static_library("circle_fifo") {
+      print("circle_fifo:$sources")
     }
 } else if (output_lib_file_type == "so") {
-    shared_library("thread") {
-      print("thread:$sources")
+    shared_library("circle_fifo") {
+      print("circle_fifo:$sources")
     }
 } else if (output_lib_file_type == "none") {
-    source_set("thread") {
-      print("thread:$sources")
+    source_set("circle_fifo") {
+      print("circle_fifo:$sources")
     }
 }
