@@ -7,6 +7,9 @@
 [submodule "project/src/open_source/LiteOS"]
 	path = project/src/open_source/LiteOS
 	url = git@gitee.com:LiteOS/LiteOS.git
-[submodule "project/src/project/LiteOS_m"]
-	path = project/src/open_source/LiteOS_m
+[submodule "project/src/project/kernel_liteos_m"]
+	path = project/src/open_source/kernel_liteos_m
 	url = git@gitee.com:openharmony/kernel_liteos_m.git
+[submodule "project/src/project/kernel_liteos_a"]
+	path = project/src/open_source/kernel_liteos_a
+	url = git@gitee.com:openharmony/kernel_liteos_a.git
