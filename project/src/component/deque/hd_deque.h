@@ -1,5 +1,5 @@
-#ifndef DEQUE_H
-#define DEQUE_H
+#ifndef HD_DEQUE_H
+#define HD_DEQUE_H
 
 typedef enum {
     DEQUE_ARRAY,
@@ -25,4 +25,4 @@ struct Deque {
 
 Deque* createDeque(int elementNum, int maxElementSize, int type);
 
-#endif // DEQUE_H
+#endif // HD_DEQUE_H

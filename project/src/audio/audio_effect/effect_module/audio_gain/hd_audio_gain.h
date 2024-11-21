@@ -1,7 +1,7 @@
-#ifndef AUDIO_GAIN_H
-#define AUDIO_GAIN_H
+#ifndef HD_AUDIO_GAIN_H
+#define HD_AUDIO_GAIN_H
 
-#include "audio_effect.h"
+#include "hd_audio_effect.h"
 
 // 增益效果结构体
 typedef struct {

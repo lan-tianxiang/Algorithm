@@ -12,7 +12,7 @@ defines = global_defines
 include_dirs += [
 ]
 sources += [
-  "soft_timer.c",
+  "hd_soft_timer.c",
 ]
 deps += [ 
 ]

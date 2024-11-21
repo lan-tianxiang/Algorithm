@@ -1,13 +1,13 @@
 /*
-    FILE NAME: deque.c
+    FILE NAME: hd_deque.c
     PURPOSE: Implementation of Deque
     DATE: 2024/08/01
     AUTHOR: lan-tianxiang
 */
 
-#include "deque.h"
-#include "deque_array.h"
-#include "deque_list.h"
+#include "hd_deque.h"
+#include "hd_deque_array.h"
+#include "hd_deque_list.h"
 #include <stdlib.h>
 
 Deque* createDeque(int elementNum, int maxElementSize, int type) {

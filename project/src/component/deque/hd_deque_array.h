@@ -1,7 +1,7 @@
-#ifndef DEQUE_ARRAY_H
-#define DEQUE_ARRAY_H
+#ifndef HD_DEQUE_ARRAY_H
+#define HD_DEQUE_ARRAY_H
 
-#include "deque.h"
+#include "hd_deque.h"
 
 typedef struct {
     void *arr;          // 指向存储队列元素的数组
@@ -35,4 +35,4 @@ void* getRearArray(Deque* deque);
 // 释放双端队列
 void freeDequeArray(Deque* deque);
 
-#endif // DEQUE_ARRAY_H
+#endif // HD_DEQUE_ARRAY_H

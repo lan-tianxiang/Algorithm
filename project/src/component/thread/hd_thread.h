@@ -1,5 +1,5 @@
-#ifndef THREAD_H
-#define THREAD_H
+#ifndef HD_THREAD_H
+#define HD_THREAD_H
 
 #include <pthread.h>
 
@@ -15,4 +15,4 @@ typedef struct thread_attr
 
 int create_and_run_thread(thread_attr_t *attr);
 
-#endif
+#endif // HD_THREAD_H

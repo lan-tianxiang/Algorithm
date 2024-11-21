@@ -1,11 +1,11 @@
 /*
-    FILE NAME: circle_fifo.c
+    FILE NAME: hd_circle_fifo.c
     PURPOSE: Implementation of circular FIFO using Array
     DATE: 2024/08/01
     AUTHOR: lan-tianxiang
 */
 
-#include "circle_fifo.h"
+#include "hd_circle_fifo.h"
 
 void circle_fifo_init(circle_fifo_t *fifo, int *buffer, size_t size) {
     fifo->buffer = buffer;

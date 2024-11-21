@@ -12,23 +12,21 @@ defines = global_defines
 include_dirs += [
 ]
 sources += [
-  "hd_deque_array.c",
-  "hd_deque_list.c",
-  "hd_deque.c",
+  "hd_list.c",
 ]
 deps += [ 
 ]
 
 if (output_lib_file_type == "a") {
-    static_library("deque") {
-      print("deque:$sources")
+    static_library("list") {
+      print("list:$sources")
     }
 } else if (output_lib_file_type == "so") {
-    shared_library("deque") {
-      print("deque:$sources")
+    shared_library("list") {
+      print("list:$sources")
     }
 } else if (output_lib_file_type == "none") {
-    source_set("deque") {
-      print("deque:$sources")
+    source_set("list") {
+      print("list:$sources")
     }
 }

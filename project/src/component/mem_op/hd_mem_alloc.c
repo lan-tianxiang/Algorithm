@@ -1,11 +1,11 @@
 /*
-    FILE NAME: mem_alloc.c
+    FILE NAME: hd_mem_alloc.c
     PURPOSE: Implementation of memory allocation functions
     DATE: 2024/10/18
     AUTHOR: lan-tianxiang
 */
 
-#include "mem_alloc.h"
+#include "hd_mem_alloc.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

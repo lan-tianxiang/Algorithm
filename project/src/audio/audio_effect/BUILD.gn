@@ -12,7 +12,7 @@ defines = global_defines
 include_dirs += [
 ]
 sources += [
-  "audio_effect.c",
+  "hd_audio_effect.c",
 ]
 deps += [
   "effect_module:effect_module",

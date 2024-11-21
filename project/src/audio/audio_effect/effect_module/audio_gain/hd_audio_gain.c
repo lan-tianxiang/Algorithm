@@ -5,7 +5,7 @@
     AUTHOR: lan-tianxiang
 */
 
-#include "audio_gain.h"
+#include "hd_audio_gain.h"
 
 // 处理函数
 int gain_process(effect_handle_t* self, audio_buffer_t* inBuffer, audio_buffer_t* outBuffer) {

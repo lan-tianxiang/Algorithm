@@ -10,10 +10,11 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "circle_fifo.h"
-#include "deque.h"
-#include "thread.h"
-#include "soft_timer.h"
+#include "hd_circle_fifo.h"
+#include "hd_deque.h"
+#include "hd_list.h"
+#include "hd_thread.h"
+#include "hd_soft_timer.h"
 
 static int count = 0;
 

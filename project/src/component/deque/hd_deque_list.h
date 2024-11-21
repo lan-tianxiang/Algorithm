@@ -1,7 +1,7 @@
-#ifndef DEQUE_LIST_H
-#define DEQUE_LIST_H
+#ifndef HD_DEQUE_LIST_H
+#define HD_DEQUE_LIST_H
 
-#include "deque.h"
+#include "hd_deque.h"
 
 typedef struct Node {
     void* data;
@@ -39,4 +39,4 @@ void* getRearList(Deque* deque);
 // Free the deque
 void freeDequeList(Deque* deque);
 
-#endif // DEQUE_LIST_H
+#endif // HD_DEQUE_LIST_H

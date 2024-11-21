@@ -1,11 +1,11 @@
 /*
-    FILE NAME: deque_array.c
+    FILE NAME: hd_deque_array.c
     PURPOSE: Implementation of Deque using Array
     DATE: 2024/08/01
     AUTHOR: lan-tianxiang
 */
 
-#include "deque_array.h"
+#include "hd_deque_array.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

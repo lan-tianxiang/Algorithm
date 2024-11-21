@@ -5,7 +5,7 @@
     AUTHOR: lan-tianxiang
 */
 
-#include "audio_effect.h"
+#include "hd_audio_effect.h"
 
 // 创建音效链
 effect_chain_t* create_effect_chain() {

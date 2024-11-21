@@ -1,5 +1,5 @@
-#ifndef SOFT_TIMER_H
-#define SOFT_TIMER_H
+#ifndef HD_SOFT_TIMER_H
+#define HD_SOFT_TIMER_H
 
 #include <signal.h>
 #include <time.h>
@@ -18,4 +18,4 @@ int create_and_run_timer(soft_timer_attr_t *attr);
 int delete_timer(soft_timer_attr_t *attr);
 int restart_timer(soft_timer_attr_t *attr);
 
-#endif
+#endif // HD_SOFT_TIMER_H

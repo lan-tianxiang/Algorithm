@@ -16,6 +16,7 @@ defines = []
 include_dirs = [
     "//src/component/circle_fifo",
     "//src/component/deque",
+    "//src/component/list",
     "//src/component/thread",
     "//src/component/timer",
 

@@ -1,5 +1,5 @@
-#ifndef CIRCLE_FIFO_H
-#define CIRCLE_FIFO_H
+#ifndef HD_CIRCLE_FIFO_H
+#define HD_CIRCLE_FIFO_H
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -19,4 +19,4 @@ bool circle_fifo_empty(circle_fifo_t *fifo);
 bool circle_fifo_full(circle_fifo_t *fifo);
 size_t circle_fifo_size(circle_fifo_t *fifo);
 
-#endif // CIRCLE_FIFO_H
+#endif // HD_CIRCLE_FIFO_H

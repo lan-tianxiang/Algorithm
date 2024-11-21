@@ -52,6 +52,9 @@
         "thread.h": "c",
         "deque_array.h": "c",
         "stdio.h": "c",
-        "deque_list.h": "c"
+        "deque_list.h": "c",
+        "soft_timer.h": "c",
+        "hd_thread.h": "c",
+        "hd_soft_timer.h": "c"
     }
 }

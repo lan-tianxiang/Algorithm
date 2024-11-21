@@ -1,11 +1,11 @@
 /*
-    FILE NAME: thread.c
+    FILE NAME: hd_thread.c
     PURPOSE: Implementation of thread
     DATE: 2024/08/14
     AUTHOR: lan-tianxiang
 */
 
-#include "thread.h"
+#include "hd_thread.h"
 
 #include <stdio.h>
 #include <stdlib.h>

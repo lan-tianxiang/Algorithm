@@ -1,5 +1,5 @@
-#ifndef AUDIO_EFFECT_H
-#define AUDIO_EFFECT_H
+#ifndef HD_AUDIO_EFFECT_H
+#define HD_AUDIO_EFFECT_H
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -57,4 +57,4 @@ void destroy_effect_chain(effect_chain_t* chain);
 void add_effect_to_chain(effect_chain_t* chain, effect_handle_t* effect);
 void process_audio_chain(effect_chain_t* chain, audio_buffer_t* inBuffer, audio_buffer_t* outBuffer);
 
-#endif // AUDIO_EFFECT_H
+#endif // HD_AUDIO_EFFECT_H

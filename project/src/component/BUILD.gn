@@ -16,6 +16,7 @@ sources += [
 deps += [
     "circle_fifo:circle_fifo",
     "deque:deque",
+    "list:list",
     "thread:thread",
     "timer:timer",
 ]

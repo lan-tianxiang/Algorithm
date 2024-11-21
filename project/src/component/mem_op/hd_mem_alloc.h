@@ -1,5 +1,5 @@
-#ifndef MEM_ALLOC_H
-#define MEM_ALLOC_H
+#ifndef HD_MEM_ALLOC_H
+#define HD_MEM_ALLOC_H
 
 void* mem_alloc(size_t size);
 
@@ -17,4 +17,4 @@ void* mem_move(void* dest, const void* src, size_t size);
 
 void* mem_calloc(size_t num, size_t size);
 
-#endif // MEM_ALLOC_H
+#endif // HD_MEM_ALLOC_H

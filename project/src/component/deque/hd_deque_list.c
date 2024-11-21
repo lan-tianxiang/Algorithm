@@ -1,11 +1,11 @@
 /*
-    FILE NAME: deque_list.c
+    FILE NAME: hd_deque_list.c
     PURPOSE: Implementation of Deque using linked list
     DATE: 2024/08/01
     AUTHOR: lan-tianxiang
 */
 
-#include "deque_list.h"
+#include "hd_deque_list.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

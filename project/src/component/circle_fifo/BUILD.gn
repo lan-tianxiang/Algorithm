@@ -12,7 +12,7 @@ defines = global_defines
 include_dirs += [
 ]
 sources += [
-  "circle_fifo.c",
+  "hd_circle_fifo.c",
 ]
 deps += [ 
 ]
