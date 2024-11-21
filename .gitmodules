@@ -4,9 +4,9 @@
 [submodule "project/src/open_source/jemalloc"]
 	path = project/src/open_source/jemalloc
 	url = https://github.com/jemalloc/jemalloc.git
-[submodule "project/src/project/src/open_source/LiteOS"]
-	path = project/src/project/src/open_source/LiteOS
+[submodule "project/src/open_source/LiteOS"]
+	path = project/src/open_source/LiteOS
 	url = git@gitee.com:LiteOS/LiteOS.git
-[submodule "project/project/src/open_source/LiteOS_m"]
-	path = project/project/src/open_source/LiteOS_m
+[submodule "project/src/project/LiteOS_m"]
+	path = project/src/open_source/LiteOS_m
 	url = git@gitee.com:openharmony/kernel_liteos_m.git
