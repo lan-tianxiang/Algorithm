@@ -55,6 +55,12 @@
         "deque_list.h": "c",
         "soft_timer.h": "c",
         "hd_thread.h": "c",
-        "hd_soft_timer.h": "c"
+        "hd_soft_timer.h": "c",
+        "los_tick_pri.h": "c",
+        "los_exc_pri.h": "c",
+        "los_hwi.h": "c",
+        "los_spinlock.h": "c",
+        "los_trace.h": "c",
+        "los_memory_pri.h": "c"
     }
 }
