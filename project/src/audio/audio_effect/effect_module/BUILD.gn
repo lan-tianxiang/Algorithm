@@ -17,16 +17,17 @@ deps += [
   "audio_gain:audio_gain",
 ]
 
+module_name = get_path_info(rebase_path("."), "name")
 if (output_lib_file_type == "a") {
-    static_library("effect_module") {
-      print("effect_module:$sources")
+    static_library("$module_name") {
+      print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "so") {
-    shared_library("effect_module") {
-      print("effect_module:$sources")
+    shared_library("$module_name") {
+      print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "none") {
-    source_set("effect_module") {
-      print("effect_module:$sources")
+    source_set("$module_name") {
+      print("$module_name:$sources")
     }
 }

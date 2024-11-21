@@ -17,16 +17,17 @@ sources += [
 deps += [ 
 ]
 
+module_name = get_path_info(rebase_path("."), "name")
 if (output_lib_file_type == "a") {
-    static_library("thread") {
-      print("thread:$sources")
+    static_library("$module_name") {
+      print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "so") {
-    shared_library("thread") {
-      print("thread:$sources")
+    shared_library("$module_name") {
+      print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "none") {
-    source_set("thread") {
-      print("thread:$sources")
+    source_set("$module_name") {
+      print("$module_name:$sources")
     }
 }

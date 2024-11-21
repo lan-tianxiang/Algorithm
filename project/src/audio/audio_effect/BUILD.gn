@@ -18,16 +18,17 @@ deps += [
   "effect_module:effect_module",
 ]
 
+module_name = get_path_info(rebase_path("."), "name")
 if (output_lib_file_type == "a") {
-    static_library("audio_effect") {
-      print("audio_effect:$sources")
+    static_library("$module_name") {
+      print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "so") {
-    shared_library("audio_effect") {
-      print("audio_effect:$sources")
+    shared_library("$module_name") {
+      print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "none") {
-    source_set("audio_effect") {
-      print("audio_effect:$sources")
+    source_set("$module_name") {
+      print("$module_name:$sources")
     }
 }

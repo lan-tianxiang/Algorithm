@@ -12,6 +12,9 @@ sources = []
 # 定义一个宏定义
 defines = []
 
+# 定义一个模块名称
+module_name = ""
+
 # 定义include_dirs
 include_dirs = [
     "//src/component/circle_fifo",

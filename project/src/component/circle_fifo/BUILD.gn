@@ -17,16 +17,17 @@ sources += [
 deps += [ 
 ]
 
+module_name = get_path_info(rebase_path("."), "name")
 if (output_lib_file_type == "a") {
-    static_library("circle_fifo") {
-      print("circle_fifo:$sources")
+    static_library("$module_name") {
+      print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "so") {
-    shared_library("circle_fifo") {
-      print("circle_fifo:$sources")
+    shared_library("$module_name") {
+      print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "none") {
-    source_set("circle_fifo") {
-      print("circle_fifo:$sources")
+    source_set("$module_name") {
+      print("$module_name:$sources")
     }
 }

@@ -17,8 +17,9 @@ sources += [
 deps += [ 
 ]
 
-source_set("src") {
-  print("src:$sources")
+module_name = get_path_info(rebase_path("."), "name")
+source_set("$module_name") {
+  print("$module_name:$sources")
   deps += [ 
     "audio:audio",
     "component:component",
