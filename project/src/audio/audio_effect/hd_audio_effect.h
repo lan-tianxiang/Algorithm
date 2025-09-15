@@ -1,3 +1,10 @@
+/*
+    FILE NAME: hd_audio_effect.h
+    PURPOSE: Header file for audio effect module
+    DATE: 2025/9/15
+    AUTHOR: nolan.lan
+*/
+
 #ifndef HD_AUDIO_EFFECT_H
 #define HD_AUDIO_EFFECT_H
 
@@ -18,6 +25,9 @@ typedef struct {
 // 音频缓冲区
 typedef struct {
     size_t frameCount;  // 音频帧的数量
+    uint32_t sampleRate; // 采样率
+    uint32_t channelNum;  // 通道数
+    uint32_t bitWidth;   // 位宽
     void*  raw;         // 指向音频数据的指针
 } audio_buffer_t;
 
@@ -55,6 +65,7 @@ typedef struct {
 effect_chain_t* create_effect_chain();
 void destroy_effect_chain(effect_chain_t* chain);
 void add_effect_to_chain(effect_chain_t* chain, effect_handle_t* effect);
+void remove_effect_from_chain(effect_chain_t* chain, effect_handle_t* effect);
 void process_audio_chain(effect_chain_t* chain, audio_buffer_t* inBuffer, audio_buffer_t* outBuffer);
 
 #endif // HD_AUDIO_EFFECT_H

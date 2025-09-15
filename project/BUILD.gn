@@ -1,24 +1,23 @@
-# Copyright 2014 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
+# Authors nolan.lan <nolan.lan@dji.com>
+# Date 2025-09-15 19:00
 
 # 引用 config.gni 文件
-import("//config/config.gni")
+import("//config/include_dir_common.gni")
 
 # 引用 project_config.gni 文件
 import("//config/project_config.gni")
-
-defines += global_defines
-include_dirs += [
-]
-sources += [
-]
 
 project_pre_lds_files_path = rebase_path("project_build.lds", root_build_dir)
 project_lds_ldflags = [ "-T", project_pre_lds_files_path ]
 print("project_lds_ldflags: $project_lds_ldflags")
 
-executable("myapp") {
+executable("audio_app") {
   #ldflags += project_lds_ldflags
-  deps += [ "src:src" ]
+  deps = [ "src:src" ]
+
+  # 设置输出目录
+  output_dir = "out"
+  
+  # 设置输出名称
+  output_name = "audio_app"
 }

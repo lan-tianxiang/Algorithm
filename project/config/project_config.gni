@@ -1,9 +1,22 @@
 # project_config.gni
 
-# 定义一个包含宏定义的列表
-global_defines = []
-
 # 定义变量区域
+
+# 定义cflags
+cflags = [  "-fPIC",
+            "-pthread",
+            "-Wall",
+            "-Werror",
+            "-Wno-unused-variable",
+            "-Wno-unused-function",
+            "-Wno-unused-parameter",
+            "-Wno-unused-but-set-variable",
+            "-Wno-unused-value",
+            "-Wno-unused-label",
+            "-Wno-unused-local-typedefs",
+            "-Wno-unused-private-field",
+            "-Wno-unused-const-variable",
+]
+
 # 定义输出的库文件类型 a:静态库 so:动态库 none:不输出
-output_lib_file_type = "none"
-global_defines += [ "LIB_IMPLEMENTATION_TYPE=\"${output_lib_file_type}\"" ]
+output_lib_file_type = "a"

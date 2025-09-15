@@ -1,3 +1,10 @@
+/*
+    FILE NAME: hd_circle_fifo.h
+    PURPOSE: Header file for circular FIFO module
+    DATE: 2025/9/15
+    AUTHOR: nolan.lan
+*/
+
 #ifndef HD_CIRCLE_FIFO_H
 #define HD_CIRCLE_FIFO_H
 

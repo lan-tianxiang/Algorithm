@@ -1,8 +1,8 @@
 /*
     FILE NAME: hd_circle_fifo.c
     PURPOSE: Implementation of circular FIFO using Array
-    DATE: 2024/08/01
-    AUTHOR: lan-tianxiang
+    DATE: 2025/9/15
+    AUTHOR: nolan.lan
 */
 
 #include "hd_circle_fifo.h"

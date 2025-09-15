@@ -1,2 +1,8 @@
-# The location of the build configuration file.
-buildconfig = "//build/BUILDCONFIG.gn"
+# GN配置文件
+# 这是源根目录的标识文件
+
+# 设置默认构建参数
+buildconfig = "//build/config/BUILDCONFIG.gn"
+
+# 设置Python路径（如果GN需要）
+script_executable = "python3"

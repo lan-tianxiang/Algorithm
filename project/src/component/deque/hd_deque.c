@@ -1,8 +1,8 @@
 /*
     FILE NAME: hd_deque.c
     PURPOSE: Implementation of Deque
-    DATE: 2024/08/01
-    AUTHOR: lan-tianxiang
+    DATE: 2025/9/15
+    AUTHOR: nolan.lan
 */
 
 #include "hd_deque.h"

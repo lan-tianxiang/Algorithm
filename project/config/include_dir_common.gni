@@ -1,0 +1,16 @@
+# 定义include_dirs
+component_include_dirs = [
+    "//src/component/circle_fifo",
+    "//src/component/deque",
+    "//src/component/list",
+    "//src/component/thread",
+    "//src/component/timer",
+]
+
+audio_effect_include_dirs = [
+    "//src/audio/audio_effect",
+]
+
+open_source_include_dirs = [
+    "//src/open_source/jemalloc",
+]

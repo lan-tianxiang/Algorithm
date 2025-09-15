@@ -1,33 +1,31 @@
-# Copyright 2014 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
+# Authors nolan.lan <nolan.lan@dji.com>
+# Date 2025-09-15 19:00
 
 # 引用 config.gni 文件
-import("//config/config.gni")
+import("//config/include_dir_common.gni")
 
 # 引用 project_config.gni 文件
 import("//config/project_config.gni")
 
-defines = global_defines
-include_dirs += [
+include_dirs = [
 ]
-sources += [
+sources = [
 ]
-deps += [
+deps = [
   "audio_effect:audio_effect",
 ]
 
 module_name = get_path_info(rebase_path("."), "name")
 if (output_lib_file_type == "a") {
     static_library("$module_name") {
-      print("$module_name:$sources")
+      #print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "so") {
     shared_library("$module_name") {
-      print("$module_name:$sources")
+      #print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "none") {
     source_set("$module_name") {
-      print("$module_name:$sources")
+      #print("$module_name:$sources")
     }
 }
