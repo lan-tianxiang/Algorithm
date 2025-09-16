@@ -9,11 +9,13 @@ import("//config/project_config.gni")
 
 include_dirs = [
 ]
-sources = [
-  "hd_audio_effect.c",
-]
+
+# 依赖
+defines = []
 deps = [
-  "effect_module:effect_module",
+  "effect_chain:effect_chain",
+  #"plugin_loader:plugin_loader",
+  "effect_factory:effect_factory",
 ]
 
 module_name = get_path_info(rebase_path("."), "name")

@@ -7,14 +7,22 @@ import("//config/include_dir_common.gni")
 # 引用 project_config.gni 文件
 import("//config/project_config.gni")
 
-include_dirs = common_include_dirs
+include_dirs = [
+]
 sources = [
-  "main.c"
+  "hd_audio_effect_wrapper.c",
 ]
-deps = [ 
-  "audio:audio",
-  "component:component",
+deps = [
 ]
+
+# 根据全局开关选择 legacy 或 v2 的源，保存在 local 变量 selected_sources
+if (defined(AUDIO_EFFECT_USE_V2) && AUDIO_EFFECT_USE_V2 == true) {
+  include_dirs += ["v2",]
+  deps += ["v2:v2",]
+} else if (defined(AUDIO_EFFECT_USE_V1) && AUDIO_EFFECT_USE_V1 == true) {
+  include_dirs += ["v1",]
+  deps += ["v1:v1",]
+}
 
 module_name = get_path_info(rebase_path("."), "name")
 if (output_lib_file_type == "a") {

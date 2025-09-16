@@ -16,7 +16,10 @@ cflags = [  "-fPIC",
             "-Wno-unused-local-typedefs",
             "-Wno-unused-private-field",
             "-Wno-unused-const-variable",
+            "-DAUDIO_EFFECT_USE_V1=true",
 ]
 
 # 定义输出的库文件类型 a:静态库 so:动态库 none:不输出
 output_lib_file_type = "a"
+
+AUDIO_EFFECT_USE_V1 = true

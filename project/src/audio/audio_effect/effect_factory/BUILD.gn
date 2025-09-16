@@ -9,21 +9,24 @@ import("//config/project_config.gni")
 
 include_dirs = audio_effect_include_dirs
 sources = [
-  "hd_audio_gain.c",
+  "effect_store.c",
 ]
-deps = [ 
+deps = [
+  "pass_through:pass_through",
+  "audio_gain:audio_gain",
 ]
 
+module_name = get_path_info(rebase_path("."), "name")
 if (output_lib_file_type == "a") {
-    static_library("audio_gain") {
-      #print("audio_gain:$sources")
+    static_library("$module_name") {
+      #print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "so") {
-    shared_library("audio_gain") {
-      #print("audio_gain:$sources")
+    shared_library("$module_name") {
+      #print("$module_name:$sources")
     }
 } else if (output_lib_file_type == "none") {
-    source_set("audio_gain") {
-      #print("audio_gain:$sources")
+    source_set("$module_name") {
+      #print("$module_name:$sources")
     }
 }

@@ -7,13 +7,11 @@ import("//config/include_dir_common.gni")
 # 引用 project_config.gni 文件
 import("//config/project_config.gni")
 
-include_dirs = common_include_dirs
+include_dirs = audio_effect_include_dirs
 sources = [
-  "main.c"
+  "hd_pass_through.c",
 ]
 deps = [ 
-  "audio:audio",
-  "component:component",
 ]
 
 module_name = get_path_info(rebase_path("."), "name")

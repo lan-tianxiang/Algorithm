@@ -8,9 +8,15 @@ component_include_dirs = [
 ]
 
 audio_effect_include_dirs = [
-    "//src/audio/audio_effect",
+    "//src/audio/audio_effect/effect_chain/v1",
+    "//src/audio/audio_effect/effect_chain/v2",
+    "//src/audio/audio_effect/effect_chain",
+    "//src/audio/audio_effect/effect_factory/audio_gain",
+    "//src/audio/audio_effect/effect_factory/pass_through",
 ]
 
 open_source_include_dirs = [
     "//src/open_source/jemalloc",
 ]
+
+common_include_dirs = component_include_dirs + audio_effect_include_dirs + open_source_include_dirs

@@ -1,0 +1,30 @@
+{
+    "files.associations": {
+        "utility": "c",
+        "compare": "c",
+        "plugin_loader_v2.h": "c",
+        "hd_audio_effect_v2.h": "c",
+        "stddef.h": "c",
+        "hd_audio_effect_v1.h": "c",
+        "hd_pass_through.h": "c",
+        "initializer_list": "c",
+        "hd_audio_effect_wrapper.h": "c",
+        "atomic": "c",
+        "bit": "c",
+        "cerrno": "c",
+        "climits": "c",
+        "cmath": "c",
+        "concepts": "c",
+        "cstdarg": "c",
+        "cstdint": "c",
+        "cstdio": "c",
+        "cstdlib": "c",
+        "type_traits": "c",
+        "limits": "c",
+        "new": "c",
+        "cstdbool": "c",
+        "typeinfo": "c",
+        "hd_audio_gain.h": "c",
+        "effect_store.h": "c"
+    }
+}
