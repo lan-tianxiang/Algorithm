@@ -16,6 +16,7 @@ deps = [
   "effect_chain:effect_chain",
   #"plugin_loader:plugin_loader",
   "effect_factory:effect_factory",
+  "effect_manager:effect_manager",
 ]
 
 module_name = get_path_info(rebase_path("."), "name")

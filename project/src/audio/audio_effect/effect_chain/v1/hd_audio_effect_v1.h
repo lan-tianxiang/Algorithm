@@ -50,12 +50,16 @@ typedef enum {
 } pcm_format_t;
 
 typedef struct {
-    void* buffer;         // 指向样本数据
-    uint32_t frameCount;  // 帧数
     uint32_t sampleRate;  // 采样率
     uint32_t channelCount;// 通道数
     uint32_t stride;      // 每帧字节数
     pcm_format_t format;  // 格式
+} audio_config_t;
+
+typedef struct {
+    void* buffer;         // 指向样本数据
+    uint32_t frameCount;  // 帧数
+    audio_config_t config;  // 配置
 } audio_buffer_t;
 
 // ------------- command / param / config --------------

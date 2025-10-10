@@ -11,6 +11,7 @@ audio_effect_include_dirs = [
     "//src/audio/audio_effect/effect_chain/v1",
     "//src/audio/audio_effect/effect_chain/v2",
     "//src/audio/audio_effect/effect_chain",
+    "//src/audio/audio_effect/effect_factory",
     "//src/audio/audio_effect/effect_factory/audio_gain",
     "//src/audio/audio_effect/effect_factory/pass_through",
 ]

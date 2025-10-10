@@ -1,0 +1,31 @@
+# Authors nolan.lan <nolan.lan@dji.com>
+# Date 2025-09-15 19:00
+
+# 引用 config.gni 文件
+import("//config/include_dir_common.gni")
+
+# 引用 project_config.gni 文件
+import("//config/project_config.gni")
+
+module_name = get_path_info(rebase_path("."), "name")
+
+include_dirs = audio_effect_include_dirs
+sources = [
+  "$module_name.c",
+]
+deps = [ 
+]
+
+if (output_lib_file_type == "a") {
+    static_library("$module_name") {
+      #print("$module_name:$sources")
+    }
+} else if (output_lib_file_type == "so") {
+    shared_library("$module_name") {
+      #print("$module_name:$sources")
+    }
+} else if (output_lib_file_type == "none") {
+    source_set("$module_name") {
+      #print("$module_name:$sources")
+    }
+}

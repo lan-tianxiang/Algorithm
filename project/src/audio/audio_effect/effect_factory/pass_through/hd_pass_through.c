@@ -5,13 +5,13 @@
 effect_result_t passthrough_process(effect_handle_t* self, audio_buffer_t* in, audio_buffer_t* out) {
     if (!in || !out) return EFFECT_BAD_VALUE;
     // simple deep copy of buffer pointer (no format conversion)
-    uint32_t bytes_to_copy = in->frameCount * in->channelCount * in->stride;
+    uint32_t bytes_to_copy = in->frameCount * in->config.channelCount * in->config.stride;
     memcpy(out->buffer, in->buffer, bytes_to_copy);
     out->frameCount = in->frameCount;
-    out->sampleRate = in->sampleRate;
-    out->channelCount = in->channelCount;
-    out->stride = in->stride;
-    out->format = in->format;
+    out->config.sampleRate = in->config.sampleRate;
+    out->config.channelCount = in->config.channelCount;
+    out->config.stride = in->config.stride;
+    out->config.format = in->config.format;
     return EFFECT_OK;
 }
 
